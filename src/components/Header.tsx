@@ -31,7 +31,7 @@ function Header() {
       },
     };
     const currentRoute = routeConfig[location.pathname as keyof typeof routeConfig];
-    setPageTitle(currentRoute?.title || '');
+    setPageTitle(currentRoute?.title);
     setShowSearchBar(currentRoute?.showSearch || false);
   }, [location.pathname]);
 
