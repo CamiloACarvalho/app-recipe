@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import SearchBar from './SearchBar';
 
 function Header() {
   const [pageTitle, setPageTitle] = useState('');
@@ -79,6 +80,7 @@ function Header() {
               alt="search icon"
             />
           </button>
+          <SearchBar />
         </>
       )}
     </header>
