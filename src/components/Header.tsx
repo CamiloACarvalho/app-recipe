@@ -14,37 +14,42 @@ function Header() {
     const routeConfig = {
       '/meals': {
         title: 'Meals',
-        showSearch: true,
+        showSearchBar: true,
         showSearchIcon: true,
+        showProfileIcon: true,
       },
       '/drinks': {
         title: 'Drinks',
-        showSearch: false,
+        showSearchBar: false,
         showSearchIcon: true,
+        showProfileIcon: true,
       },
       '/profile': {
         title: 'Profile',
-        showSearch: false,
+        showSearchBar: false,
         showSearchIcon: false,
+        showProfileIcon: true,
       },
       '/done-recipes': {
         title: 'Done Recipes',
-        showSearch: false,
+        showSearchBar: false,
         showSearchIcon: false,
+        setShowProfileIcon: true,
       },
       '/favorite-recipes': {
         title: 'Favorite Recipes',
-        showSearch: false,
+        showSearchBar: false,
         showSearchIcon: false,
+        showProfileIcon: true,
       },
     };
 
     const currentRoute = routeConfig[location.pathname as keyof typeof routeConfig];
 
     setPageTitle(currentRoute?.title || '');
-    setShowSearchBar(currentRoute?.showSearch || false);
+    setShowSearchBar(currentRoute?.showSearchBar || false);
     setShowSearchIcon(currentRoute?.showSearchIcon || false);
-    setShowProfileIcon(location.pathname === '/profile');
+    setShowProfileIcon(currentRoute?.showProfileIcon || false);
   }, [location.pathname]);
 
   const handleSearchBar = () => {
@@ -76,7 +81,6 @@ function Header() {
             type="text"
             data-testid="search-input"
             className="search-input"
-            disabled={ !showSearchBar }
             placeholder="Search"
           />
           <button
@@ -84,7 +88,6 @@ function Header() {
             data-testid="search-top-btn"
             className="search-btn"
             onClick={ handleSearchBar }
-            disabled={ !showSearchIcon }
           >
             <img src="./images/searchIcon.svg" alt="search icon" />
           </button>
