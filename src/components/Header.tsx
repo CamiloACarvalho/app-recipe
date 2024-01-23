@@ -12,35 +12,27 @@ function Header() {
       '/meals': {
         title: 'Meals',
         showSearch: true,
-        showSearchIcon: true,
       },
       '/drinks': {
         title: 'Drinks',
-        showSearch: false,
-        showSearchIcon: true,
+        showSearch: true,
       },
       '/profile': {
         title: 'Profile',
         showSearch: false,
-        showSearchIcon: false,
       },
       '/done-recipes': {
         title: 'Done Recipes',
         showSearch: false,
-        showSearchIcon: false,
       },
       '/favorite-recipes': {
         title: 'Favorite Recipes',
         showSearch: false,
-        showSearchIcon: false,
       },
     };
     const currentRoute = routeConfig[location.pathname as keyof typeof routeConfig];
-
-    setPageTitle(currentRoute?.title || '');
+    setPageTitle(currentRoute?.title);
     setShowSearchBar(currentRoute?.showSearch || false);
-    setShowSearchIcon(currentRoute?.showSearchIcon || false);
-    setShowProfileIcon(location.pathname === '/profile');
   }, [location.pathname]);
 
   const handleSearchBar = () => {
