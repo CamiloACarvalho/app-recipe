@@ -12,6 +12,8 @@ function App() {
       <Route path="/drinks/*" element={ <Header /> } />
       <Route path="/meals/:id/*" />
       <Route path="/drinks/:id/*" />
+      <Route path="/meals/:id/in-progress/*" />
+      <Route path="/drinks/:id/in-progress/*" />
       <Route path="/profile" element={ <Header /> } />
       <Route path="/done-recipes" element={ <Header /> } />
       <Route path="/favorite-recipes" element={ <Header /> } />
