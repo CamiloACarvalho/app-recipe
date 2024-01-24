@@ -21,66 +21,68 @@
 // -> www.the{meal or cocktail}db.com/api/json/v1/1/search.php?i={search}
 
 // A ideia aqui é criar uma função que gere a URL de acordo com o tipo de busca e o valor de busca.
-export const baseURL = (path: string) => `www.the${path.includes('meal')
-  ? 'meal'
-  : 'cocktail'}db.com/api/json/v1/1/`;
+export const baseURL = (resourceType: string) => (
+  `www.the${resourceType}db.com/api/json/v1/1`
+);
 
-// Aqui recebe um caminho, um tipo e um valor e retorna a URL do endpoint.
-export const endPoint = (path: string, type: string, value: string) => {
-  // Verifica o tipo e constrói a URL do endpoint conforme necessário.
-  if (type === 'name') {
-    return `${baseURL(path)}search.php?s=${value}`;
-  } if (type === 'firstLetter') {
-    return `${baseURL(path)}filter.php?f=${value}`;
-  } if (type === 'ingredient') {
-    return `${baseURL(path)}search.php?i=${value}`;
+export const endPoint = (
+  resource: string,
+  search: string,
+  value: string,
+) => {
+  switch (search) {
+    case 'name':
+      return `${baseURL(resource)}/search.php?s=${value}`;
+    case 'firstLetter':
+      return `${baseURL(resource)}/filter.php?f=${value}`;
+    case 'ingredient':
+      return `${baseURL(resource)}/search.php?i=${value}`;
+    default:
+      return `${baseURL(resource)}/defaultEndpoint.php`;
   }
-  // Caso contrário, retorna o endpoint padrão.
-  return `${baseURL(path)}defaultEndpoint.php`;
 };
 
-// Pensei em criar uma constante url que será a URL a ser buscada na API.
-// const url = baseURL + endPoint;
-
-// Seria fazer um fetch da URL que deseja buscar.
-export const fetchData = async (url) => {
+export const fetchData = async (url: string) => {
   try {
     const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data. Status: ${response.status}`);
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
+    throw error;
   }
 };
 
-// mapDrinkData que recebe um drink e retorna um objeto com os dados padronizados da API de cocktails, seria o retorno da API com as buscas desejadas
-// O Thiago Paz na monitoria me disse para criar uma função de map para que fosse renderizado os dados da API de drinks e de meals de forma padronizada.
-// Pesquisei como fazer isso mas fiquei com dúvida como passar os parâmetros para a função.
-export const mapDrinkData = (drink) => {
+export const mapData = (item: any, type: string) => {
+  const ingredients = [];
+
+  // Itera sobre os itens de ingredientes até encontrar um valor nulo ou vazio
+  for (let i = 1; i <= 10; i++) {
+    const ingredientName = item[`strIngredient${i}`];
+    const ingredientMeasure = item[`strMeasure${i}`];
+
+    if (!ingredientName || !ingredientMeasure) {
+      // Se encontrou um valor nulo ou vazio, interrompe o loop
+      break;
+    }
+
+    ingredients.push({ name: ingredientName, measure: ingredientMeasure });
+  }
+
   return {
-    id: drink.idDrink,
-    name: drink.strDrink,
-    category: drink.strCategory,
-    instructions: drink.strInstructions,
-    ingredients: [
-      { name: drink.strIngredient1, measure: drink.strMeasure1 },
-      { name: drink.strIngredient2, measure: drink.strMeasure2 },
-    ],
-    thumbnail: drink.strDrinkThumb,
+    id: item[`id${type}`],
+    name: item[`str${type}`],
+    category: item.strCategory,
+    instructions: item.strInstructions,
+    ingredients,
+    thumbnail: item[`str${type}Thumb`],
   };
 };
 
-// mapMealData que recebe uma refeição e retorna um objeto com os dados padronizados da API de refeições.
-export const mapMealData = (meal) => {
-  return {
-    id: meal.idMeal,
-    name: meal.strMeal,
-    category: meal.strCategory,
-    instructions: meal.strInstructions,
-    ingredients: [
-      { name: meal.strIngredient1, measure: meal.strMeasure1 },
-      { name: meal.strIngredient2, measure: meal.strMeasure2 },
-    ],
-    thumbnail: meal.strMealThumb,
-  };
-};
+export const mapDrinkData = (drink: any) => mapData(drink, 'Drink');
+export const mapMealData = (meal: any) => mapData(meal, 'Meal');
