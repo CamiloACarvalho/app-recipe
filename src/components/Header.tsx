@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import SearchBar from './SearchBar';
 
 function Header() {
   const [pageTitle, setPageTitle] = useState('');
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const location = useLocation();
 
   useEffect(() => {
@@ -66,6 +68,8 @@ function Header() {
             data-testid="search-input"
             className="search-input"
             placeholder="Search"
+            value={ searchValue }
+            onChange={ (e) => setSearchValue(e.target.value) }
           />
         }
           <button
@@ -79,6 +83,7 @@ function Header() {
               alt="search icon"
             />
           </button>
+          <SearchBar />
         </>
       )}
     </header>
