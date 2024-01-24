@@ -43,44 +43,44 @@ export const endPoint = (path: string, type: string, value: string) => {
 // const url = baseURL + endPoint;
 
 // Seria fazer um fetch da URL que deseja buscar.
-// export const fetchData = async (url) => {
-//   try {
-//     const response = await fetch(url);
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//   }
-// };
+export const fetchData = async (url) => {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
 
 // mapDrinkData que recebe um drink e retorna um objeto com os dados padronizados da API de cocktails, seria o retorno da API com as buscas desejadas
 // O Thiago Paz na monitoria me disse para criar uma função de map para que fosse renderizado os dados da API de drinks e de meals de forma padronizada.
 // Pesquisei como fazer isso mas fiquei com dúvida como passar os parâmetros para a função.
-// export const mapDrinkData = (drink) => {
-//   return {
-//     id: drink.idDrink,
-//     name: drink.strDrink,
-//     category: drink.strCategory,
-//     instructions: drink.strInstructions,
-//     ingredients: [
-//       { name: drink.strIngredient1, measure: drink.strMeasure1 },
-//       { name: drink.strIngredient2, measure: drink.strMeasure2 },
-//     ],
-//     thumbnail: drink.strDrinkThumb,
-//   };
-// };
+export const mapDrinkData = (drink) => {
+  return {
+    id: drink.idDrink,
+    name: drink.strDrink,
+    category: drink.strCategory,
+    instructions: drink.strInstructions,
+    ingredients: [
+      { name: drink.strIngredient1, measure: drink.strMeasure1 },
+      { name: drink.strIngredient2, measure: drink.strMeasure2 },
+    ],
+    thumbnail: drink.strDrinkThumb,
+  };
+};
 
 // mapMealData que recebe uma refeição e retorna um objeto com os dados padronizados da API de refeições.
-// export const mapMealData = (meal) => {
-//   return {
-//     id: meal.idMeal,
-//     name: meal.strMeal,
-//     category: meal.strCategory,
-//     instructions: meal.strInstructions,
-//     ingredients: [
-//       { name: meal.strIngredient1, measure: meal.strMeasure1 },
-//       { name: meal.strIngredient2, measure: meal.strMeasure2 },
-//     ],
-//     thumbnail: meal.strMealThumb,
-//   };
-// };
+export const mapMealData = (meal) => {
+  return {
+    id: meal.idMeal,
+    name: meal.strMeal,
+    category: meal.strCategory,
+    instructions: meal.strInstructions,
+    ingredients: [
+      { name: meal.strIngredient1, measure: meal.strMeasure1 },
+      { name: meal.strIngredient2, measure: meal.strMeasure2 },
+    ],
+    thumbnail: meal.strMealThumb,
+  };
+};
