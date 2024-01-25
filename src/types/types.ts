@@ -5,3 +5,7 @@ export type SearchContextType = {
   setSearchType: (value: string) => void;
   handleSearchClick: () => void;
 };
+
+export type ProviderProps = {
+  children: React.ReactNode;
+};

@@ -1,34 +1,22 @@
-import { useState } from 'react';
-import SearchContext from './SearchContext';
+import React from 'react';
+import SearchContextProps from './SearchContext';
 
-import { SearchContextType } from '../../types/types';
+import { ProviderProps } from '../../types/types';
 
-function SearchProvider({ children }: any) {
-  const [searchType, setSearchType] = useState('name');
-  const [searchValue, setSearchValue] = useState('');
+function SearchProvider({ children }: ProviderProps) {
+  const [recipes, setRecipes] = React.useState([]);
 
-  const handleSearchClick = async () => {
-    if (searchType === 'firstLetter' && searchValue.length > 1) {
-      alert('Por favor, insira apenas uma letra para a busca por Primeira Letra.');
-      // return;
-    }
-
-    // const data = await getData(searchType, searchValue);
-    // console.log(`Resultados da busca por ${searchType}:`, data);
-  };
-
-  const shareValues: SearchContextType = {
-    searchType,
-    setSearchType,
-    searchValue,
-    setSearchValue,
-    handleSearchClick,
+  const dados = {
+    recipes,
+    setRecipes,
   };
 
   return (
-    <SearchContext.Provider value={ shareValues }>
-      {children}
-    </SearchContext.Provider>
+    <SearchContextProps.Provider value={ dados }>
+      <div>
+        { children }
+      </div>
+    </SearchContextProps.Provider>
   );
 }
 
