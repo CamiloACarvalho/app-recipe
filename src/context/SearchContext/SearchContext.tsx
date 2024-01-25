@@ -1,6 +1,10 @@
 import { createContext } from 'react';
-import { SearchContextType } from '../../types/types';
 
-const SearchContext = createContext({} as SearchContextType);
+type SearchContextProps = {
+  recipes:any;
+  setRecipes:any;
+};
+
+const SearchContext = createContext({} as SearchContextProps);
 
 export default SearchContext;
