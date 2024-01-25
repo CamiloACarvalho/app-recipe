@@ -1,13 +1,57 @@
-type RecipeCardProps = {
-  
-};
+import { useState, useEffect } from 'react';
 
-export default function RecipeCard({ recipe }: RecipeCardProps) {
+interface Recipe {
+  idMeal?: string;
+  idDrink?: string;
+  strMealThumb?: string;
+  strDrinkThumb?: string;
+  strMeal?: string;
+  strDrink?: string;
+}
+
+function RecipeCard() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    const mealPage = window.location.pathname === '/meals';
+    const endpoint = mealPage
+      ? 'https://www.themealdb.com/api/json/v1/1/search.php?s='
+      : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        const recipeType = mealPage ? 'meals' : 'drinks';
+        const fetchedRecipes = data[recipeType] || [];
+        setRecipes(fetchedRecipes.slice(0, 12));
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar receitas:', error);
+      });
+  }, []);
+
   return (
     <div>
-      <h2>
-
-      </h2>
+      {recipes.map((recipe, index) => (
+        <div key={ index } data-testid={ `${index}-recipe-card` }>
+          {recipe && (
+            <>
+              <img
+                src={ recipe.strMealThumb || recipe.strDrinkThumb }
+                alt="Recipe"
+                data-testid={ `${index}-card-img` }
+              />
+              <p
+                data-testid={ `${index}-card-name` }
+              >
+                {recipe.strMeal || recipe.strDrink}
+              </p>
+            </>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
+
+export default RecipeCard;

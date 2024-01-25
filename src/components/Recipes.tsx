@@ -1,41 +1,49 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import RecipeCard from './RecipeCard';
 
-export default function Recipes() {
-  const [apiData, setApiData] = useState([]);
-  const location = useLocation();
-
-  const fetchData = async (url: string, recipe: string) => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data. Status: ${response.status}`);
-      }
-      const data = await response.json();
-      const newData = data[recipe].slice(0, 12);
-      setApiData(newData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  };
+function Recipes() {
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    if (location.pathname === '/meals') {
-      fetchData('https://www.themealdb.com/api/json/v1/1/search.php?s=', 'meals');
-    } else fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'drinks');
-  }, [location.pathname]);
+    const mealPage = window.location.pathname === '/meals';
+    const endpoint = mealPage
+      ? 'https://www.themealdb.com/api/json/v1/1/list.php?c=list'
+      : 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
 
-  console.log(apiData);
-
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        const categoryType = mealPage ? 'meals' : 'drinks';
+        const fetchedCategories = data[categoryType] || [];
+        setCategories(
+          fetchedCategories
+            .slice(0, 5).map((category: { strCategory: any }) => category.strCategory),
+        );
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar categorias:', error);
+      });
+  }, []);
   return (
     <div>
-      {
-        location.pathname === '/meals' ? 
-        apiData.map(() => (
-          
-        ))
-      }
+      <Header />
+      <h1>Receitas</h1>
+      <div>
+        {categories.map((category, index) => (
+          <button
+            key={ index }
+            data-testid={ `${category}-category-filter` }
+            onClick={ () => console.log(`Categoria selecionada: ${category}`) }
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+      <RecipeCard />
+      <Footer />
     </div>
   );
 }
+export default Recipes;
