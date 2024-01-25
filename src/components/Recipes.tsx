@@ -16,9 +16,9 @@ function Recipes() {
       .then((response) => response.json())
       .then((data) => {
         const categoryType = mealPage ? 'meals' : 'drinks';
-        const fetchedCateg = data[categoryType] || [];
+        const fetchedCategories = data[categoryType] || [];
         setCategories(
-          fetchedCateg
+          fetchedCategories
             .slice(0, 5).map((category: { strCategory: any }) => category.strCategory),
         );
       })

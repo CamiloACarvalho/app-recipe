@@ -8,6 +8,7 @@ interface Recipe {
   strMeal?: string;
   strDrink?: string;
 }
+
 function RecipeCard() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
@@ -21,8 +22,8 @@ function RecipeCard() {
       .then((response) => response.json())
       .then((data) => {
         const recipeType = mealPage ? 'meals' : 'drinks';
-        const fetchedRecip = data[recipeType] || [];
-        setRecipes(fetchedRecip.slice(0, 12));
+        const fetchedRecipes = data[recipeType] || [];
+        setRecipes(fetchedRecipes.slice(0, 12));
       })
       .catch((error) => {
         console.error('Erro ao buscar receitas:', error);
