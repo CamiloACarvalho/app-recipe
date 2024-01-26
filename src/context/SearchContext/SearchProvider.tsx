@@ -1,22 +1,24 @@
-import React from 'react';
-import SearchContextProps from './SearchContext';
-
+import { useState } from 'react';
+import SearchContext from './SearchContext';
 import { ProviderProps } from '../../types/types';
 
 function SearchProvider({ children }: ProviderProps) {
-  const [recipes, setRecipes] = React.useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const dados = {
     recipes,
     setRecipes,
+    searchValue,
+    setSearchValue,
   };
 
   return (
-    <SearchContextProps.Provider value={ dados }>
+    <SearchContext.Provider value={ dados }>
       <div>
         { children }
       </div>
-    </SearchContextProps.Provider>
+    </SearchContext.Provider>
   );
 }
 

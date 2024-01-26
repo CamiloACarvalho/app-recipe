@@ -1,32 +1,28 @@
-import React, { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { searchRecipes } from '../functionsHelpers/searchFunction';
 import SearchContext from '../context/SearchContext/SearchContext';
+import { searchRecipes } from '../functionsHelpers/searchFunction';
+import { DrinkType, MealType } from '../types/types';
 
 function SearchBar() {
-  const [searchInput, setSearchInput] = React.useState('');
-  const [searchType, setSearchType] = React.useState('Ingredient');
+  const [searchType, setSearchType] = useState('Ingredient');
   const location = useLocation();
   const navigate = useNavigate();
-  const { recipes, setRecipes } = useContext(SearchContext);
+  const { recipes, setRecipes, searchValue } = useContext(SearchContext);
 
-  const handleSearchTypeChange = (event: any) => {
-    setSearchType(event.target.value);
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (recipes) {
       if (recipes.length === 0) {
-        window.alert("Sorry, we haven't found any recipes for these filters");
-      } else if (recipes.length === 1) {
-        navigate(`${location.pathname}/${recipes[0].idMeal
-          || recipes[0].idDrink}`);
+        // window.alert("Sorry, we haven't found any recipes for these filters");
+      } else if (recipes.length === 1 && Object.keys(recipes[0]).length > 3) {
+        navigate(`${location.pathname}/${(recipes[0] as MealType).idMeal
+          || (recipes[0] as DrinkType).idDrink}`);
       }
     }
   }, [location.pathname, navigate, recipes]);
 
   const handleClick = async () => {
-    const data = await searchRecipes(searchType, location, searchInput);
+    const data = await searchRecipes(searchType, location, searchValue);
     if (data.meals === null || data.drinks === null) {
       setRecipes([]);
       return;
@@ -36,20 +32,13 @@ function SearchBar() {
 
   return (
     <div>
-      <input
-        type="text"
-        value={ searchInput }
-        onChange={ (e) => setSearchInput(e.target.value) }
-        placeholder="Enter search term"
-        data-testid="search-input"
-      />
       <label>
         <input
           type="radio"
           name="searchType"
           value="Ingredient"
           checked={ searchType === 'Ingredient' }
-          onChange={ handleSearchTypeChange }
+          onChange={ ({ target }) => setSearchType(target.value) }
           data-testid="ingredient-search-radio"
         />
         Ingredient
@@ -60,7 +49,7 @@ function SearchBar() {
           name="searchType"
           value="Name"
           checked={ searchType === 'Name' }
-          onChange={ handleSearchTypeChange }
+          onChange={ ({ target }) => setSearchType(target.value) }
           data-testid="name-search-radio"
         />
         Name
@@ -71,7 +60,7 @@ function SearchBar() {
           name="searchType"
           value="First letter"
           checked={ searchType === 'First letter' }
-          onChange={ handleSearchTypeChange }
+          onChange={ ({ target }) => setSearchType(target.value) }
           data-testid="first-letter-search-radio"
         />
         Primeira Letra
