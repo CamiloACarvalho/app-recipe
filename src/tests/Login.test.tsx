@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
 import App from '../App';
+import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
 
 const email = 'email-input';
@@ -8,7 +9,11 @@ const submitBtn = 'login-submit-btn';
 
 describe('Testa a tela de login', () => {
   test('Verifica se existem os campos de email, senha e o botão de entrar', () => {
-    renderWithRouter(<App />);
+    renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+    );
 
     const getEmail = screen.getByTestId(email);
     const getPassword = screen.getByTestId(password);
@@ -19,7 +24,11 @@ describe('Testa a tela de login', () => {
     expect(getSubmitBtn).toBeInTheDocument();
   });
   test('O botão "Enter" é habilitado após inserir email e senha válidos', async () => {
-    const { user } = renderWithRouter(<App />);
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+    );
 
     const getEmail = screen.getByTestId(email);
     const getPassword = screen.getByTestId(password);
@@ -31,7 +40,11 @@ describe('Testa a tela de login', () => {
     expect(getSubmitBtn).toBeEnabled();
   });
   test('Após clicar no botão de submit o email é salvo no localstorage e o usuário é redirecionado para a tela de comidas', async () => {
-    const { user } = renderWithRouter(<App />);
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+    );
 
     const getEmail = screen.getByTestId(email);
     const getPassword = screen.getByTestId(password);

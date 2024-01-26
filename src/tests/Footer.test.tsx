@@ -1,10 +1,16 @@
 import { screen } from '@testing-library/react';
 import App from '../App';
+import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
 
 describe('Testa o componente Footer', () => {
   test('Testa se a navegação é feita corretamente ao clicar nos ícones de comida e bebida', async () => {
-    const { user } = renderWithRouter(<App />, { route: '/profile' });
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/profile' },
+    );
 
     const getProfileTitle = screen.getByRole('heading', { name: /profile/i });
     expect(getProfileTitle).toBeInTheDocument();
@@ -20,7 +26,7 @@ describe('Testa o componente Footer', () => {
 
     await user.click(getMealsIcon);
 
-    const getMealsTitle = screen.getByRole('heading', { name: /meals/i });
+    const getMealsTitle = screen.getByRole('img', { name: /mealicon/i });
     expect(getMealsTitle).toBeInTheDocument();
   });
 });
