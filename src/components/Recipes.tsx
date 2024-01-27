@@ -95,7 +95,7 @@ function Recipes() {
         console.error('Erro ao buscar receitas:', error);
       });
   };
-
+  console.log(recipes);
   return (
     <div>
       <h1>Receitas</h1>
