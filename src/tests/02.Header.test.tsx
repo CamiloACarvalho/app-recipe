@@ -4,7 +4,7 @@ import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
 
 describe('Testa o componente Header', () => {
-  test('Testa se na rota "meals" o Header aparece com seus componentes e é possível interagir com eles', async () => {
+  test('01 - Testa se na rota "meals" o Header aparece com seus componentes e é possível interagir com eles', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
         <App />

@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
@@ -51,9 +51,7 @@ describe('Testa o componente Header', () => {
 
     await user.click(btnSearch);
 
-    // await waitFor(() => expect(history.location.pathname).toBe('/meals/52977'));
-    await waitFor(() => {
-      expect(screen.getByText('test')).toBeInTheDocument();
-    });
+    const findText = await screen.findByText('test');
+    expect(findText).toBeInTheDocument();
   });
 });

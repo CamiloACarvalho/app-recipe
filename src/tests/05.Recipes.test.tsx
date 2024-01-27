@@ -1,37 +1,35 @@
-import { screen, waitFor, act } from '@testing-library/react';
-import { vi } from 'vitest';
+import { screen } from '@testing-library/react';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
-import mockApiMeals from './mockApiMeals';
-import mockCategories from './mockCategories';
-
-const email = 'email-input';
-const password = 'password-input';
-const submitBtn = 'login-submit-btn';
 
 describe('Testa o componente Header', async () => {
-  // beforeEach(() => vi
-  //   .spyOn(global, 'fetch')
-  //   .mockResolvedValue({
-  //     ok: true,
-  //     status: 200,
-  //     json: async () => [
-  //       mockApiMeals,
-  //       mockCategories,
-  //     ],
-  //   } as Response));
+  test('01 - Verificando se os elementos da tela de comidas estão presentes', async () => {
+    renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/meals' },
+    );
 
-  // afterEach(() => vi.clearAllMocks());
+    // Verificando se estão todos os botões de busca por categoria
+    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
+    expect(getBeefBtn).toBeInTheDocument();
 
-  test('01 - Verificando se os elementos estão na tela', async () => {
-    const MOCK_RESPONSE = {
-      ok: true,
-      status: 200,
-      json: async () => mockCategories,
-    } as Response;
-    const mock = vi.spyOn(global, 'fetch').mockResolvedValue(MOCK_RESPONSE);
+    const getBreakfastBtn = await screen.findByRole('button', { name: /breakfast/i });
+    expect(getBreakfastBtn).toBeInTheDocument();
 
+    const getChickenBtn = await screen.findByRole('button', { name: /chicken/i });
+    expect(getChickenBtn).toBeInTheDocument();
+
+    const getDessertBtn = await screen.findByRole('button', { name: /dessert/i });
+    expect(getDessertBtn).toBeInTheDocument();
+
+    const getGoatBtn = await screen.findByRole('button', { name: /goat/i });
+    expect(getGoatBtn).toBeInTheDocument();
+  });
+
+  test('02 - Verificando se os botões de categoria da tela de comidas funcionam', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
         <App />
@@ -39,84 +37,225 @@ describe('Testa o componente Header', async () => {
       { route: '/meals' },
     );
 
-    // const getEmail = screen.getByTestId(email);
-    // const getPassword = screen.getByTestId(password);
-    // const getSubmitBtn = screen.getByTestId(submitBtn);
-    // const emailTest = 'email@test.com';
+    // Testando o botão de categoria Beef
+    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
+    await user.click(getBeefBtn);
 
-    // await user.type(getEmail, emailTest);
-    // await user.type(getPassword, '1234567');
-    // await user.click(getSubmitBtn);
+    // Chamando a receita que está na tela
+    const getRecipeBeef = await screen.findByText(/beef and mustard pie/i);
+    expect(getRecipeBeef).toBeInTheDocument();
 
-    // Verificando se há um testo de receitas na tela
-    const getRecipesTitle = screen.getByRole('heading', { name: /receitas/i });
-    expect(getRecipesTitle).toBeInTheDocument();
+    // Testando o botão de categoria Breakfast
+    const getBreakfastBtn = await screen.findByTestId('Breakfast-category-filter');
+    await user.click(getBreakfastBtn);
+
+    // Chamando a receita que está na tela
+    const getRecipeBrakfast = await screen.findByText(/bread omelette/i);
+    expect(getRecipeBrakfast).toBeInTheDocument();
+
+    // Testando o botão de categoria Chicken
+    const getChickenBtn = await screen.findByTestId('Chicken-category-filter');
+    await user.click(getChickenBtn);
+
+    // Chamando a receita que está na tela
+    const getRecipeChicken = await screen.findByText(/ayam percik/i);
+    expect(getRecipeChicken).toBeInTheDocument();
+
+    // Testando o botão de categoria Dessert
+    const getDessertBtn = await screen.findByTestId('Dessert-category-filter');
+    await user.click(getDessertBtn);
+
+    // Chamando a receita que está na tela
+    const getRecipeDessert = await screen.findByText(/apam balik/i);
+    expect(getRecipeDessert).toBeInTheDocument();
+
+    // Testando o botão de categoria Goat
+    const getGoatBtn = await screen.findByTestId('Goat-category-filter');
+    await user.click(getGoatBtn);
+
+    // Chamando a receita que está na tela
+    const getRecipeGoat = await screen.findByText(/mbuzi choma/i);
+    expect(getRecipeGoat).toBeInTheDocument();
+  });
+  test('03 - Verificando se ao clicar no mesmo botão de categoria de comidas a API é chamada novamente com as receitas iniciais', async () => {
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/meals' },
+    );
+
+    // Testando o botão de categoria Beef
+    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
+    await user.click(getBeefBtn);
+
+    // Chamando a receita que está na tela
+    const getRecipeBeef = await screen.findByText(/beef and mustard pie/i);
+    expect(getRecipeBeef).toBeInTheDocument();
+
+    // Testando o botão de categoria ao clicar nele novamente
+    const getBeefBtnAgain = await screen.findByRole('button', { name: /beef/i });
+    await user.click(getBeefBtnAgain);
+
+    // Chamando a receita que está na tela
+    const getRecipeCorba = await screen.findByText(/corba/i);
+    expect(getRecipeCorba).toBeInTheDocument();
+  });
+  test('04 - Verificando se ao clicar no botão de resetar as categorias (botão "All") na tela de comidas a API é chamada novamente com as receitas iniciais', async () => {
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/meals' },
+    );
+
+    // Testando o botão de categoria Beef
+    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
+    await user.click(getBeefBtn);
+
+    // Chamando a receita que está na tela
+    const getRecipeBeef = await screen.findByText(/beef and mustard pie/i);
+    expect(getRecipeBeef).toBeInTheDocument();
+
+    // Testando o botão de resetar as categorias
+    const allBtn = screen.getByRole('button', { name: /all/i });
+    expect(allBtn).toBeInTheDocument();
+
+    await user.click(allBtn);
+
+    const getRecipeCorba = await screen.findByText(/corba/i);
+    expect(getRecipeCorba).toBeInTheDocument();
+  });
+  test('05 - Verificando se os elementos da tela de bebidas estão presentes', async () => {
+    renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/drinks' },
+    );
 
     // Verificando se estão todos os botões de busca por categoria
-    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
-    expect(getBeefBtn).toBeInTheDocument();
+    const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
+    expect(getOrdinaryBtn).toBeInTheDocument();
 
-    //   const getBreakfastBtn = screen.findByRole('Breakfast-category-filter');
-    //   expect(getBreakfastBtn).toBeInTheDocument();
+    const getCocktailBtn = await screen.findByRole('button', { name: /cocktail/i });
+    expect(getCocktailBtn).toBeInTheDocument();
 
-    //   const getChickenBtn = screen.findByRole('Chicken-category-filter');
-    //   expect(getChickenBtn).toBeInTheDocument();
+    const getShakeBtn = await screen.findByRole('button', { name: /shake/i });
+    expect(getShakeBtn).toBeInTheDocument();
 
-    //   const getDessertBtn = screen.findByRole('Dessert-category-filter');
-    //   expect(getDessertBtn).toBeInTheDocument();
+    const getOthertBtn = await screen.findByRole('button', { name: /other \/ unknown/i });
+    expect(getOthertBtn).toBeInTheDocument();
 
-    //   const getGoatBtn = screen.findByRole('Goat-category-filter');
-    //   expect(getGoatBtn).toBeInTheDocument();
+    const getCocoaBtn = await screen.findByRole('button', { name: /cocoa/i });
+    expect(getCocoaBtn).toBeInTheDocument();
   });
+  test('06 - Verificando se os botões de categoria da tela de bebidas funcionam', async () => {
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/drinks' },
+    );
 
-  // test('02 - Verificando se os botões de categoria funcionam', async () => {
-  //   const { user } = renderWithRouter(
-  //     <SearchProvider>
-  //       <App />
-  //     </SearchProvider>,
-  //     { route: '/meals' },
-  //   );
+    const getInitialDrink = await screen.findByText(/a1/i);
+    expect(getInitialDrink).toBeInTheDocument();
 
-  //   const dataTestIds = '0-card-name';
+    // Verificando se estão todos os botões de busca por categoria
+    const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
+    expect(getOrdinaryBtn).toBeInTheDocument();
 
-  //   // Testando o botão de categoria Beef
-  //   const getBeefBtn = screen.getByTestId('Beef-category-filter');
-  //   user.click(getBeefBtn);
+    await user.click(getOrdinaryBtn);
 
-  //   // Chamando a receita que está na tela
-  //   const getRecipeBeef = screen.getByTestId(dataTestIds);
-  //   expect(getRecipeBeef).toHaveTextContent('Beef and Mustard Pie');
+    const getOrdinaryDrink = await screen.findByText(/3-mile long island iced tea/i);
+    expect(getOrdinaryDrink).toBeInTheDocument();
 
-  //   // Testando o botão de categoria Breakfast
-  //   const getBreakfastBtn = screen.getByTestId('Breakfast-category-filter');
-  //   user.click(getBreakfastBtn);
+    const getCocktailBtn = await screen.findByRole('button', { name: /cocktail/i });
+    expect(getCocktailBtn).toBeInTheDocument();
 
-  //   // Chamando a receita que está na tela
-  //   const getRecipeBrakfast = screen.getByTestId(dataTestIds);
-  //   expect(getRecipeBrakfast).toHaveTextContent('Bread omelette');
+    await user.click(getCocktailBtn);
 
-  //   // Testando o botão de categoria Chicken
-  //   const getChickenBtn = screen.getByTestId('Chicken-category-filter');
-  //   user.click(getChickenBtn);
+    const getCocktailDrink = await screen.findByText(/155 belmont/i);
+    expect(getCocktailDrink).toBeInTheDocument();
 
-  //   // Chamando a receita que está na tela
-  //   const getRecipeChicken = screen.getByTestId(dataTestIds);
-  //   expect(getRecipeChicken).toHaveTextContent('Chicken Couscous Salad');
+    const getShakeBtn = await screen.findByRole('button', { name: /shake/i });
+    expect(getShakeBtn).toBeInTheDocument();
 
-  //   // Testando o botão de categoria Dessert
-  //   const getDessertBtn = screen.getByTestId('Dessert-category-filter');
-  //   user.click(getDessertBtn);
+    await user.click(getShakeBtn);
 
-  //   // Chamando a receita que está na tela
-  //   const getRecipeDessert = screen.getByTestId(dataTestIds);
-  //   expect(getRecipeDessert).toHaveTextContent('Apple Frangipan Tart');
+    const getShakeDrink = await screen.findByText(/151 florida bushwacker/i);
+    expect(getShakeDrink).toBeInTheDocument();
 
-  //   // Testando o botão de categoria Goat
-  //   const getGoatBtn = screen.getByTestId('Goat-category-filter');
-  //   user.click(getGoatBtn);
+    const getOthertBtn = await screen.findByRole('button', { name: /other \/ unknown/i });
+    expect(getOthertBtn).toBeInTheDocument();
 
-  //   // Chamando a receita que está na tela
-  //   const getRecipeGoat = screen.getByTestId(dataTestIds);
-  //   expect(getRecipeGoat).toHaveTextContent('Goat Cheese Tartlets');
-  // });
+    await user.click(getOthertBtn);
+
+    const getOtherDrink = await screen.findByText(/a piece of ass/i);
+    expect(getOtherDrink).toBeInTheDocument();
+
+    const getCocoaBtn = await screen.findByRole('button', { name: /cocoa/i });
+    expect(getCocoaBtn).toBeInTheDocument();
+
+    await user.click(getCocoaBtn);
+
+    const getCocoaDrink = await screen.findByText(/castillian hot chocolate/i);
+    expect(getCocoaDrink).toBeInTheDocument();
+  });
+  test('07 - Verificando se ao clicar no mesmo botão de categoria de bebidas a API é chamada novamente com as receitas iniciais', async () => {
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/drinks' },
+    );
+
+    const getInitialDrink = await screen.findByText(/a1/i);
+    expect(getInitialDrink).toBeInTheDocument();
+
+    // Verificando se estão todos os botões de busca por categoria
+    const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
+    expect(getOrdinaryBtn).toBeInTheDocument();
+
+    await user.click(getOrdinaryBtn);
+
+    const getOrdinaryDrink = await screen.findByText(/3-mile long island iced tea/i);
+    expect(getOrdinaryDrink).toBeInTheDocument();
+
+    const getOrdinaryBtnAgain = await screen.findByRole('button', { name: /ordinary drink/i });
+    expect(getOrdinaryBtnAgain).toBeInTheDocument();
+
+    await user.click(getOrdinaryBtnAgain);
+
+    const getInitialDrinkAgain = await screen.findByText(/a1/i);
+    expect(getInitialDrinkAgain).toBeInTheDocument();
+  });
+  test('08 - Verificando se ao clicar no botão de resetar as categorias (botão "All") na tela de bebidas a API é chamada novamente com as receitas iniciais', async () => {
+    const { user } = renderWithRouter(
+      <SearchProvider>
+        <App />
+      </SearchProvider>,
+      { route: '/drinks' },
+    );
+
+    const getInitialDrink = await screen.findByText(/a1/i);
+    expect(getInitialDrink).toBeInTheDocument();
+
+    // Verificando se estão todos os botões de busca por categoria
+    const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
+    expect(getOrdinaryBtn).toBeInTheDocument();
+
+    await user.click(getOrdinaryBtn);
+
+    const getOrdinaryDrink = await screen.findByText(/3-mile long island iced tea/i);
+    expect(getOrdinaryDrink).toBeInTheDocument();
+
+    const allBtn = screen.getByRole('button', { name: /all/i });
+    expect(allBtn).toBeInTheDocument();
+
+    await user.click(allBtn);
+
+    const getInitialDrinkAgain = await screen.findByText(/a1/i);
+    expect(getInitialDrinkAgain).toBeInTheDocument();
+  });
 });

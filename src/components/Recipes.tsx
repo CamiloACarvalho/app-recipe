@@ -1,17 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import SearchContext from '../context/SearchContext/SearchContext';
 import RecipeCard from './RecipeCard';
 
-const mealPage = window.location.pathname === '/meals';
-const mealEndpoint = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
-
 function Recipes() {
+  const location = useLocation();
   const [categories, setCategories] = useState<string[]>([]);
   const [currentCategory, setCurrentCategory] = useState('');
   const { recipes, setRecipes } = useContext(SearchContext);
 
+  const mealEndpoint = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+  const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
   useEffect(() => {
+    const mealPage = location.pathname === '/meals';
     const endpoint = mealPage
       ? mealEndpoint
       : drinkEndpoint;
@@ -19,15 +20,13 @@ function Recipes() {
       .then((response) => response.json())
       .then((data) => {
         const recipeType = mealPage ? 'meals' : 'drinks';
-        const fetchedRecipes = data[recipeType] || [];
+        const fetchedRecipes = data[recipeType];
         setRecipes(fetchedRecipes.slice(0, 12));
-      })
-      .catch((error) => {
-        console.error('Erro ao buscar receitas na tela inicial:', error);
       });
-  }, [setRecipes]);
+  }, [setRecipes, location.pathname]);
 
   useEffect(() => {
+    const mealPage = location.pathname === '/meals';
     const endpoint = mealPage
       ? 'https://www.themealdb.com/api/json/v1/1/list.php?c=list'
       : 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
@@ -35,18 +34,16 @@ function Recipes() {
       .then((response) => response.json())
       .then((data) => {
         const categoryType = mealPage ? 'meals' : 'drinks';
-        const fetchedCategories = data[categoryType] || [];
+        const fetchedCategories = data[categoryType];
         setCategories(
           fetchedCategories
             .slice(0, 5).map((category: { strCategory: any }) => category.strCategory),
         );
-      })
-      .catch((error) => {
-        console.error('Erro ao buscar categorias:', error);
       });
-  }, []);
+  }, [location.pathname]);
 
   const handleCategory = (category: string) => {
+    const mealPage = location.pathname === '/meals';
     if (currentCategory !== category) {
       const endpoint = mealPage
         ? `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
@@ -55,12 +52,9 @@ function Recipes() {
         .then((response) => response.json())
         .then((data) => {
           const recipeType = mealPage ? 'meals' : 'drinks';
-          const fetchedRecipes = data[recipeType] || [];
+          const fetchedRecipes = data[recipeType];
           setCurrentCategory(category);
           setRecipes(fetchedRecipes.slice(0, 12));
-        })
-        .catch((error) => {
-          console.error('Erro ao buscar receitas por categoria:', error);
         });
     } else {
       const endpoint = mealPage
@@ -70,17 +64,15 @@ function Recipes() {
         .then((response) => response.json())
         .then((data) => {
           const recipeType = mealPage ? 'meals' : 'drinks';
-          const fetchedRecipes = data[recipeType] || [];
+          const fetchedRecipes = data[recipeType];
           setCurrentCategory('');
           setRecipes(fetchedRecipes.slice(0, 12));
-        })
-        .catch((error) => {
-          console.error('Erro ao buscar receitas:', error);
         });
     }
   };
 
   const handleAll = () => {
+    const mealPage = location.pathname === '/meals';
     const endpoint = mealPage
       ? mealEndpoint
       : drinkEndpoint;
@@ -88,14 +80,11 @@ function Recipes() {
       .then((response) => response.json())
       .then((data) => {
         const recipeType = mealPage ? 'meals' : 'drinks';
-        const fetchedRecipes = data[recipeType] || [];
+        const fetchedRecipes = data[recipeType];
         setRecipes(fetchedRecipes.slice(0, 12));
-      })
-      .catch((error) => {
-        console.error('Erro ao buscar receitas:', error);
       });
   };
-  console.log(recipes);
+
   return (
     <div>
       <h1>Receitas</h1>
