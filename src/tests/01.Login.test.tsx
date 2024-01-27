@@ -8,7 +8,7 @@ const password = 'password-input';
 const submitBtn = 'login-submit-btn';
 
 describe('Testa a tela de login', () => {
-  test('Verifica se existem os campos de email, senha e o botão de entrar', () => {
+  test('01 - Verifica se existem os campos de email, senha e o botão de entrar', () => {
     renderWithRouter(
       <SearchProvider>
         <App />
@@ -23,7 +23,7 @@ describe('Testa a tela de login', () => {
     expect(getPassword).toBeInTheDocument();
     expect(getSubmitBtn).toBeInTheDocument();
   });
-  test('O botão "Enter" é habilitado após inserir email e senha válidos', async () => {
+  test('02 - O botão "Enter" é habilitado após inserir email e senha válidos', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
         <App />
@@ -39,7 +39,7 @@ describe('Testa a tela de login', () => {
 
     expect(getSubmitBtn).toBeEnabled();
   });
-  test('Após clicar no botão de submit o email é salvo no localstorage e o usuário é redirecionado para a tela de comidas', async () => {
+  test('03 - Após clicar no botão de submit o email é salvo no localstorage e o usuário é redirecionado para a tela de comidas', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
         <App />
