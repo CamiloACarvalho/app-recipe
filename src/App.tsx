@@ -9,9 +9,11 @@ import Recipes from './components/Recipes';
 function App() {
   return (
     <Routes>
+      {/* colocar página de detalhes nessa rota. Ela está improvisada para fazer a cobertura */}
+      <Route path="/meals/:id" element={ <div> test </div> } />
       <Route path="/" element={ <Login /> } />
       <Route
-        path="/meals/*"
+        path="/meals"
         element={
           <>
             <Header />
