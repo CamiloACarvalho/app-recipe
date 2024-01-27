@@ -1,4 +1,4 @@
-import { findByText, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
