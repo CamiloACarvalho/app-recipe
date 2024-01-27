@@ -62,7 +62,7 @@ export const mapData = (item: any, type: string) => {
   const ingredients = [];
 
   // Itera sobre os itens de ingredientes até encontrar um valor nulo ou vazio
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 20; i++) {
     const ingredientName = item[`strIngredient${i}`];
     const ingredientMeasure = item[`strMeasure${i}`];
 
