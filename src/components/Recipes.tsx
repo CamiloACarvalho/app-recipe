@@ -54,7 +54,6 @@ function Recipes() {
           const recipeType = mealPage ? 'meals' : 'drinks';
           const fetchedRecipes = data[recipeType];
           setCurrentCategory(category);
-          console.log(fetchedRecipes);
           setRecipes(fetchedRecipes.slice(0, 12));
         });
     } else {
