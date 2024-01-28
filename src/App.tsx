@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Login from './components/Login';
 import Recipes from './components/Recipes';
+import DoneRecipes from './components/DoneRecipes';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       {/* colocar página de detalhes nessa rota. Ela está improvisada para fazer a cobertura */}
       <Route path="/meals/:id" element={ <div> test </div> } />
       <Route path="/" element={ <Login /> } />
+      <Route path="done-recipes" element={ <DoneRecipes /> } />
       <Route
         path="/meals"
         element={
