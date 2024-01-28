@@ -92,12 +92,10 @@ export default function RecipeDetails() {
           </div>
         ))
       }
-      <div className="slide-container">
-        <ul>
-          {
+      <ul>
+        {
       recomendation.map((item, index) => (
         <li
-          className="slide-item"
           key={ index }
           data-testid={ `${index}-recommendation-card` }
         >
@@ -112,8 +110,7 @@ export default function RecipeDetails() {
         </li>
       ))
         }
-        </ul>
-      </div>
+      </ul>
     </>
   );
 }
