@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DrinkType, MealType } from '../types/types';
 import styles from './InProgressElements.module.css';
 
 type InProgressProps = {
   recipe: MealType | DrinkType;
   index: number;
+  onIngredientChecked: (isChecked: boolean) => void;
 };
 
-function InProgressElements({ recipe, index }: InProgressProps) {
-  const [checkedIngredients, setCheckedIngredients] = useState([]);
+function InProgressElements(
+  {
+    recipe,
+    index,
+    onIngredientChecked,
+  }: InProgressProps,
+) {
+  const localStorageKey = `inProgressRecipes-${index}`;
+  const storedProgress = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
+
+  const [checkedIngredients, setCheckedIngredients] = useState<{
+    [key: string]: boolean;
+  }>(storedProgress);
+
   const ingredients = [];
 
   for (let i = 1; i <= 20; i++) {
@@ -20,14 +33,24 @@ function InProgressElements({ recipe, index }: InProgressProps) {
     }
   }
 
-  // Olhar o código do trybe-tunes pra ver como foi sendo feito as músicas favoritas. Acreito deva ser a mesma lógica
-  const handleChecked = (ingredientIndex: any) => {
+  const handleChecked = (ingredientIndex: number) => {
     setCheckedIngredients((prevCheckedIngredients) => {
-      const newCheckedIngredients = [...prevCheckedIngredients];
+      const newCheckedIngredients = { ...prevCheckedIngredients };
       newCheckedIngredients[ingredientIndex] = !newCheckedIngredients[ingredientIndex];
+
+      localStorage.setItem(localStorageKey, JSON.stringify(newCheckedIngredients));
+
+      onIngredientChecked(newCheckedIngredients[ingredientIndex]);
+
       return newCheckedIngredients;
     });
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(localStorageKey);
+    };
+  }, [localStorageKey]);
 
   return (
     <div
