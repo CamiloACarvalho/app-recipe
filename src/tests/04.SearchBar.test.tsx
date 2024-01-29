@@ -51,7 +51,7 @@ describe('Testa o componente Header', () => {
 
     await user.click(btnSearch);
 
-    const findText = await screen.findByText('test');
+    const findText = await screen.findByText('Corba');
     expect(findText).toBeInTheDocument();
   });
 });

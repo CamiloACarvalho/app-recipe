@@ -134,3 +134,19 @@ export type DoneRecipesBtnProps = {
   handleMealFilter: () => void;
   handleDrinkFilter: () => void;
 };
+
+export type FavoriteKey = {
+  id: string;
+  type: string;
+  nationality: string;
+  category: string;
+  alcoholicOrNot: string;
+  name: string;
+  image: string;
+};
+
+export type CarouselCardProps = {
+  recomendation: MealType[] | DrinkType[];
+  handleSelect: (selectedIndex: number) => void;
+  carouselIndex: number;
+};

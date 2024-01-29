@@ -1,0 +1,13 @@
+.start-recipe {
+  bottom: 10px;
+  position: fixed;
+  right: 10px;
+}
+
+.carousel-caption-1 {
+  right: 750px;
+}
+
+.carousel-caption-2 {
+  left: 750px;
+}
