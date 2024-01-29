@@ -5,12 +5,14 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Login from './components/Login';
 import Recipes from './components/Recipes';
+import DoneRecipes from './components/DoneRecipes';
 import RecipeDetails from './components/RecipeDetails';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={ <Login /> } />
+      <Route path="done-recipes" element={ <DoneRecipes /> } />
       <Route
         path="/meals"
         element={

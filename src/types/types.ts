@@ -115,3 +115,22 @@ export type DrinkType = {
 export type ProviderProps = {
   children: ReactNode;
 };
+
+export type DoneRecipe = {
+  id: string;
+  type: string;
+  area: string;
+  category: string;
+  alcoholicOrNot: string;
+  name: string;
+  image: string;
+  doneDate: string;
+  tags: string[];
+  nationality: string;
+};
+
+export type DoneRecipesBtnProps = {
+  handleAllFilter: () => void;
+  handleMealFilter: () => void;
+  handleDrinkFilter: () => void;
+};
