@@ -5,12 +5,11 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Login from './components/Login';
 import Recipes from './components/Recipes';
+import RecipeDetails from './components/RecipeDetails';
 
 function App() {
   return (
     <Routes>
-      {/* colocar página de detalhes nessa rota. Ela está improvisada para fazer a cobertura */}
-      <Route path="/meals/:id" element={ <div> test </div> } />
       <Route path="/" element={ <Login /> } />
       <Route
         path="/meals"
@@ -32,8 +31,8 @@ function App() {
           </>
         }
       />
-      <Route path="/meals/:id/*" />
-      <Route path="/drinks/:id/*" />
+      <Route path="/meals/:id/*" element={ <RecipeDetails /> } />
+      <Route path="/drinks/:id/*" element={ <RecipeDetails /> } />
       <Route path="/meals/:id/in-progress/*" />
       <Route path="/drinks/:id/in-progress/*" />
       <Route
