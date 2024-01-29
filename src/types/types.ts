@@ -15,7 +15,7 @@ export type MealType = {
   strInstructions: string;
   strMealThumb?: string;
   strTags: string;
-  strYoutube: string;
+  strYoutube: string | undefined;
   strIngredient1: string;
   strIngredient2: string | null;
   strIngredient3: string | null;
@@ -64,7 +64,7 @@ export type DrinkType = {
   strDrink: string;
   strDrinkAlternate: string | null;
   strTags: string | null;
-  strVideo: string | null;
+  strVideo: string | undefined;
   strCategory: string;
   strIBA: string | null;
   strAlcoholic: string;
