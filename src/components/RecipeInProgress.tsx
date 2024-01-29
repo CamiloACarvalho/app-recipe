@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import SearchContext from '../context/SearchContext/SearchContext';
 import InProgressElements from './InProgressElements';
 
@@ -8,16 +8,17 @@ function Recipes() {
   const { recipes, setRecipes } = useContext(SearchContext);
   const [favorite, setFavorite] = useState(false);
   const [concludedRecipe, setConcludedRecipe] = useState<boolean []>([]);
+  const { id } = useParams<{ id: string }>();
 
-  const mealEndpoint = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-  const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+  const mealEndpoint = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
+  const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
 
   useEffect(() => {
-    const mealPage = location.pathname === '/meals/:id/in-progress'; // Ta renderizando apenas drinks
+    const mealPage = location.pathname.split('/')[1] === 'meals';
     const endpoint = mealPage
       ? mealEndpoint
       : drinkEndpoint;
-    fetch(endpoint)
+    fetch(`${endpoint}${id}`)
       .then((response) => response.json())
       .then((data) => {
         const recipeType = mealPage ? 'meals' : 'drinks';
@@ -25,7 +26,7 @@ function Recipes() {
         setRecipes(fetchedRecipes); // Aqui tenho que pegar a informação dos itens apenas em progresso para renderizar nessa tela nessa tela
         setConcludedRecipe(new Array(fetchedRecipes.length).fill(false));
       });
-  }, [setRecipes, location.pathname]);
+  }, [setRecipes, location.pathname, id]);
 
   const handleChecked = (recipeIndex: number, isChecked: boolean) => {
     setConcludedRecipe((prevConcludedRecipe) => {

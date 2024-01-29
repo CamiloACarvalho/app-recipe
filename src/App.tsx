@@ -33,10 +33,10 @@ function App() {
           </>
         }
       />
-      <Route path="/meals/:id/*" />
-      <Route path="/drinks/:id/" />
+      <Route path="/meals/:id" />
+      <Route path="/drinks/:id" />
       <Route
-        path="/meals/:id/in-progress/"
+        path="/meals/:id/in-progress"
         element={
           <>
             <Header />
@@ -45,7 +45,7 @@ function App() {
         }
       />
       <Route
-        path="/drinks/:id/in-progress/"
+        path="/drinks/:id/in-progress"
         element={
           <>
             <Header />
