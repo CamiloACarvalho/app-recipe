@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { DrinkType, MealType } from '../types/types';
 import { mapData } from '../utils/Api';
-import './RecipeDetails.css';
 
 export default function RecipeDetails() {
   const params = useParams();
