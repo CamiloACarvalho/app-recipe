@@ -11,6 +11,7 @@ function Recipes() {
 
   const mealEndpoint = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
   const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+
   useEffect(() => {
     const mealPage = location.pathname === '/meals';
     const endpoint = mealPage
