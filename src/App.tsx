@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Login from './components/Login';
 import Recipes from './components/Recipes';
+import RecipeInProgress from './components/RecipeInProgress';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         }
       />
       <Route
-        path="/drinks/*"
+        path="/drinks/"
         element={
           <>
             <Header />
@@ -33,9 +34,25 @@ function App() {
         }
       />
       <Route path="/meals/:id/*" />
-      <Route path="/drinks/:id/*" />
-      <Route path="/meals/:id/in-progress/*" />
-      <Route path="/drinks/:id/in-progress/*" />
+      <Route path="/drinks/:id/" />
+      <Route
+        path="/meals/:id/in-progress/"
+        element={
+          <>
+            <Header />
+            <RecipeInProgress />
+          </>
+        }
+      />
+      <Route
+        path="/drinks/:id/in-progress/"
+        element={
+          <>
+            <Header />
+            <RecipeInProgress />
+          </>
+        }
+      />
       <Route
         path="/profile"
         element={

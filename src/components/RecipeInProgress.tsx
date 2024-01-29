@@ -13,7 +13,7 @@ function Recipes() {
   const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 
   useEffect(() => {
-    const mealPage = location.pathname === '/meals/:id/in-progress';
+    const mealPage = location.pathname === '/meals/:id/in-progress'; // Ta renderizando apenas drinks
     const endpoint = mealPage
       ? mealEndpoint
       : drinkEndpoint;
@@ -22,16 +22,10 @@ function Recipes() {
       .then((data) => {
         const recipeType = mealPage ? 'meals' : 'drinks';
         const fetchedRecipes = data[recipeType];
-        setRecipes(fetchedRecipes.slice(0));
+        setRecipes(fetchedRecipes); // Aqui tenho que pegar a informação dos itens apenas em progresso para renderizar nessa tela nessa tela
         setConcludedRecipe(new Array(fetchedRecipes.length).fill(false));
       });
   }, [setRecipes, location.pathname]);
-
-  // Preciso criar a lógica para que o botão de receita concluída seja habilitado
-  // apenas quando todos os ingredientes forem marcados como true
-  // const allIngredientsChecked = (recipeIndex: number) => {
-  //   return concludedRecipe[recipeIndex] === true;
-  // };
 
   const handleChecked = (recipeIndex: number, isChecked: boolean) => {
     setConcludedRecipe((prevConcludedRecipe) => {
@@ -59,6 +53,7 @@ function Recipes() {
           ))
         }
       </div>
+      {/* Desobrir pq os ícones não estão aparecendo */}
       <button
         type="button"
         data-testid="favorite-btn"
