@@ -129,6 +129,7 @@ function Recipes() {
       </button>
       <button
         type="button"
+        data-testid="finish-recipe-btn"
         disabled={ !enableFinishButton }
         onClick={ handleFineshedRecipe }
       >

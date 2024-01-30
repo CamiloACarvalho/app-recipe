@@ -16,23 +16,14 @@ function InProgressElements(
   }: InProgressProps,
 ) {
   const localStorageKey = `inProgressRecipes-${index}`;
+  const [ingredients, setIngredients] = useState([]);
+  const [mensure, setMensure] = useState([]);
   const storedProgress = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
-
   const [checkedIngredients, setCheckedIngredients] = useState<{
     [key: string]: boolean;
   }>(storedProgress);
 
-  const ingredients = [];
-
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = (recipe as any)[`strIngredient${i}`];
-    const measure = (recipe as any)[`strMeasure${i}`];
-
-    if (ingredient && measure) {
-      ingredients.push(`${ingredient}: ${measure}`);
-    }
-  }
-
+  // Preciso rever o handleChecked para que ele habilite o botão de finalizar receita após todos os ingredientes serem marcados
   const handleChecked = (ingredientIndex: number) => {
     setCheckedIngredients((prevCheckedIngredients) => {
       const newCheckedIngredients = { ...prevCheckedIngredients };
@@ -45,6 +36,29 @@ function InProgressElements(
       return newCheckedIngredients;
     });
   };
+
+  useEffect(() => {
+    const ingredientesOfRecipe = Object.entries(recipe);
+    const ingredientsOfRecipe = ingredientesOfRecipe.filter((entry) => {
+      const [key] = entry;
+      return key.includes('strIngredient');
+    });
+
+    const onlyIngredientsValid = ingredientsOfRecipe
+      .filter((entry) => entry[1] !== null && entry[1] !== '');
+
+    const mensureOfRecipe = ingredientesOfRecipe.filter((entry) => {
+      const [key] = entry;
+      return key.includes('strMeasure');
+    });
+
+    const onlyMensureValid = mensureOfRecipe
+      .filter((entry) => entry[1] !== null && entry[1] !== '');
+
+    // Preciso acertar as tipagens para que o typescript não reclame
+    setIngredients(onlyIngredientsValid);
+    setMensure(onlyMensureValid);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -78,20 +92,22 @@ function InProgressElements(
           ? 'Alcoholic'
           : 'Non Alcoholic'}
       </h3>
+
       <ul>
         {ingredients.map((ingredient, i) => (
-          <li
-            key={ i }
-            className={ checkedIngredients[i] ? styles.checkedIngredient : '' }
-          >
-            <input
-              className="checkbox"
-              type="checkbox"
-              data-testid={ `${index}-${ingredient}-ingredient-step` }
-              checked={ checkedIngredients[i] || false }
-              onChange={ () => handleChecked(i) }
-            />
-            {ingredient}
+          <li key={ i }>
+            <label
+              className={ checkedIngredients[i] ? styles.checkedIngredient : '' }
+              data-testid={ `${i}-ingredient-step` }
+            >
+              <input
+                className="checkbox"
+                type="checkbox"
+                checked={ checkedIngredients[i] || false }
+                onChange={ () => handleChecked(i) }
+              />
+              { `${ingredient[1]}: ${mensure[i][1]}` }
+            </label>
           </li>
         ))}
       </ul>
