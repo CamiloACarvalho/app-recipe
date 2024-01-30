@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import SearchContext from '../context/SearchContext/SearchContext';
 import InProgressElements from './InProgressElements';
 
 function Recipes() {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const { recipes, setRecipes } = useContext(SearchContext);
   const [favorite, setFavorite] = useState(false);
   const [concludedRecipe, setConcludedRecipe] = useState<boolean []>([]);
@@ -60,9 +62,7 @@ function Recipes() {
 
   const handleFineshedRecipe = () => {
     const mealPage = location.pathname.split('/')[1] === 'meals';
-    const endpoint = mealPage
-      ? mealEndpoint
-      : drinkEndpoint;
+    const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
     fetch(`${endpoint}${id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -85,6 +85,9 @@ function Recipes() {
         };
         doneRecipes.push(newDoneRecipe);
         localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+
+        // Redirecionamento para /done-recipes
+        navigate('/done-recipes');
       });
   };
 

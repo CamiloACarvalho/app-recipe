@@ -8,22 +8,19 @@ type InProgressProps = {
   onIngredientChecked: (isChecked: boolean) => void;
 };
 
-function InProgressElements(
-  {
-    recipe,
-    index,
-    onIngredientChecked,
-  }: InProgressProps,
-) {
+function InProgressElements({
+  recipe,
+  index,
+  onIngredientChecked,
+}: InProgressProps) {
   const localStorageKey = `inProgressRecipes-${index}`;
-  const [ingredients, setIngredients] = useState([]);
-  const [mensure, setMensure] = useState([]);
+  const [ingredients, setIngredients] = useState<[string, string][]>([]);
+  const [mensure, setMensure] = useState<[string, string][]>([]);
   const storedProgress = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
   const [checkedIngredients, setCheckedIngredients] = useState<{
     [key: string]: boolean;
   }>(storedProgress);
 
-  // Preciso rever o handleChecked para que ele habilite o botão de finalizar receita após todos os ingredientes serem marcados
   const handleChecked = (ingredientIndex: number) => {
     setCheckedIngredients((prevCheckedIngredients) => {
       const newCheckedIngredients = { ...prevCheckedIngredients };
@@ -39,10 +36,11 @@ function InProgressElements(
 
   useEffect(() => {
     const ingredientesOfRecipe = Object.entries(recipe);
+
     const ingredientsOfRecipe = ingredientesOfRecipe.filter((entry) => {
       const [key] = entry;
       return key.includes('strIngredient');
-    });
+    }) as [string, string][];
 
     const onlyIngredientsValid = ingredientsOfRecipe
       .filter((entry) => entry[1] !== null && entry[1] !== '');
@@ -50,15 +48,14 @@ function InProgressElements(
     const mensureOfRecipe = ingredientesOfRecipe.filter((entry) => {
       const [key] = entry;
       return key.includes('strMeasure');
-    });
+    }) as [string, string][];
 
     const onlyMensureValid = mensureOfRecipe
       .filter((entry) => entry[1] !== null && entry[1] !== '');
 
-    // Preciso acertar as tipagens para que o typescript não reclame
     setIngredients(onlyIngredientsValid);
     setMensure(onlyMensureValid);
-  }, []);
+  }, [recipe]);
 
   useEffect(() => {
     return () => {
