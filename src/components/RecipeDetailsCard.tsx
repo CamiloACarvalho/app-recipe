@@ -8,7 +8,7 @@ export default function RecipeDetailsCard({ recipeData }: RecipeCardDataProps) {
   return (
     <div>
       {
-        recipeData.map((recipe) => (
+        recipeData?.map((recipe) => (
           <div
             key={ recipe.id }
           >
