@@ -6,6 +6,9 @@ import { renderWithRouter } from '../utils/renderWithRouter';
 const showSearch = 'search-top-btn';
 const searchInput = 'search-input';
 const searchBtn = 'exec-search-btn';
+const ingredientSearchRadio = 'ingredient-search-radio';
+const nameSearchRadio = 'name-search-radio';
+const firstLetterSearchRadio = 'first-letter-search-radio';
 
 describe('Testa o componente Header', () => {
   test('01 - Verifica se o filtro de ingredientes está funcionando na tela de comidas', async () => {
@@ -19,8 +22,8 @@ describe('Testa o componente Header', () => {
     const btnShowSearch = screen.getByTestId(showSearch);
     await user.click(btnShowSearch);
     const inputSearchBar = screen.getByTestId(searchInput);
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const ingredientRadio = screen.getByTestId('ingredient-search-radio');
+    const nameRadio = screen.getByTestId(nameSearchRadio);
+    const ingredientRadio = screen.getByTestId(ingredientSearchRadio);
     const btnSearch = screen.getByTestId(searchBtn);
 
     await user.type(inputSearchBar, 'Red Pepper Flakes');
@@ -42,7 +45,7 @@ describe('Testa o componente Header', () => {
     const btnShowSearch = screen.getByTestId(showSearch);
     await user.click(btnShowSearch);
     const inputSearchBar = screen.getByTestId(searchInput);
-    const nameRadio = screen.getByTestId('name-search-radio');
+    const nameRadio = screen.getByTestId(nameSearchRadio);
     const btnSearch = screen.getByTestId(searchBtn);
 
     await user.click(nameRadio);
@@ -64,7 +67,7 @@ describe('Testa o componente Header', () => {
     await user.click(btnShowSearch);
     const btnSearch = screen.getByTestId(searchBtn);
     const inputSearchBar = screen.getByTestId(searchInput);
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadio);
 
     await user.type(inputSearchBar, 's');
     await user.click(firstLetterRadio);
@@ -84,8 +87,8 @@ describe('Testa o componente Header', () => {
     const btnShowSearch = screen.getByTestId(showSearch);
     await user.click(btnShowSearch);
     const inputSearchBar = screen.getByTestId(searchInput);
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const ingredientRadio = screen.getByTestId('ingredient-search-radio');
+    const nameRadio = screen.getByTestId(nameSearchRadio);
+    const ingredientRadio = screen.getByTestId(ingredientSearchRadio);
     const btnSearch = screen.getByTestId(searchBtn);
 
     await user.type(inputSearchBar, 'Grand Marnier');
@@ -107,7 +110,7 @@ describe('Testa o componente Header', () => {
     const btnShowSearch = screen.getByTestId(showSearch);
     await user.click(btnShowSearch);
     const inputSearchBar = screen.getByTestId(searchInput);
-    const nameRadio = screen.getByTestId('name-search-radio');
+    const nameRadio = screen.getByTestId(nameSearchRadio);
     const btnSearch = screen.getByTestId(searchBtn);
 
     await user.click(nameRadio);
@@ -129,7 +132,7 @@ describe('Testa o componente Header', () => {
     await user.click(btnShowSearch);
     const btnSearch = screen.getByTestId(searchBtn);
     const inputSearchBar = screen.getByTestId(searchInput);
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadio);
 
     await user.type(inputSearchBar, 'k');
     await user.click(firstLetterRadio);
