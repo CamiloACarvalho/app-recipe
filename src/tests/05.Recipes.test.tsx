@@ -80,7 +80,6 @@ describe('Testa o componente Header', async () => {
     const getInitialDrink = await screen.findByText(/a1/i);
     expect(getInitialDrink).toBeInTheDocument();
 
-    // Verificando se estão todos os botões de busca por categoria
     const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
     expect(getOrdinaryBtn).toBeInTheDocument();
 
@@ -100,7 +99,6 @@ describe('Testa o componente Header', async () => {
     const getInitialDrink = await screen.findByText(/a1/i);
     expect(getInitialDrink).toBeInTheDocument();
 
-    // Verificando se estão todos os botões de busca por categoria
     const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
     expect(getOrdinaryBtn).toBeInTheDocument();
 
@@ -128,7 +126,6 @@ describe('Testa o componente Header', async () => {
     const getInitialDrink = await screen.findByText(/a1/i);
     expect(getInitialDrink).toBeInTheDocument();
 
-    // Verificando se estão todos os botões de busca por categoria
     const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
     expect(getOrdinaryBtn).toBeInTheDocument();
 
