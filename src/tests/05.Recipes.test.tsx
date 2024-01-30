@@ -13,7 +13,7 @@ describe('Testa o componente Header', async () => {
     );
 
     // Testando o botão de categoria Beef
-    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
+    const getBeefBtn = await screen.findByTestId('Beef-category-filter');
     await user.click(getBeefBtn);
 
     // Chamando a receita que está na tela
