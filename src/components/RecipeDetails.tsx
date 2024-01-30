@@ -3,10 +3,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import blackHeart from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
-import { DrinkType, FavoriteKey, MealType } from '../types/types';
-import { mapData } from '../utils/Api';
+import { FavoriteKey } from '../types/types';
+import { handleFavoriteKey, handleLocalFavorite, mapData } from '../utils/Api';
 import CarouselCard from './CarouselCard';
 import './RecipeDetails.css';
+import RecipeDetailsCard from './RecipeDetailsCard';
 
 export default function RecipeDetails() {
   const params = useParams();
@@ -75,96 +76,15 @@ export default function RecipeDetails() {
   };
 
   const handleFavorite = () => {
-    const mealPage = location.pathname.includes('/meals/');
-    const recipeType = mealPage ? 'meal' : 'drink';
-    const favoriteKey = {
-      id: (recipes[0] as MealType).idMeal || (recipes[0] as DrinkType).idDrink,
-      type: recipeType,
-      nationality: (recipes[0] as MealType).strArea || '',
-      category: (recipes[0] as MealType).strCategory,
-      alcoholicOrNot: (recipes[0] as DrinkType).strAlcoholic || '',
-      name: (recipes[0] as MealType).strMeal || (recipes[0] as DrinkType).strDrink,
-      image: (recipes[0] as MealType).strMealThumb
-        || (recipes[0] as DrinkType).strDrinkThumb,
-    };
-    const getFavorite = JSON.parse(
-      localStorage.getItem('favoriteRecipes') as string,
-    ) || [];
-    if (getFavorite.length > 0) {
-      let newArray = [];
-      const findDuplicate = getFavorite
-        .find((favoriteItem: FavoriteKey) => favoriteItem.id === favoriteKey.id);
-      if (findDuplicate) {
-        newArray = getFavorite
-          .filter((favoriteItem: FavoriteKey) => favoriteItem.id !== favoriteKey.id);
-        setFavorite(false);
-      } else {
-        newArray = [...getFavorite, favoriteKey];
-        setFavorite(true);
-      }
-      localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
-    } else {
-      localStorage.setItem(
-        'favoriteRecipes',
-        JSON.stringify([favoriteKey]),
-      );
-      setFavorite(true);
-    }
+    const favoriteKey = handleFavoriteKey(location.pathname, recipes);
+    handleLocalFavorite(favoriteKey, setFavorite);
   };
 
   return (
     <>
-      {
-        recipeData.map((recipe) => (
-          <div
-            key={ recipe.id }
-          >
-            <img
-              data-testid="recipe-photo"
-              src={ recipe.thumbnail }
-              alt="recipe-thumb"
-            />
-            <h2
-              data-testid="recipe-title"
-            >
-              { recipe.name }
-            </h2>
-            <h4
-              data-testid="recipe-category"
-            >
-              { recipe.category }
-              { recipe.alcoholic ? recipe.alcoholic : null }
-            </h4>
-            <ul>
-              {
-                recipe.ingredients.map((ingredient, index) => (
-                  <li
-                    data-testid={ `${index}-ingredient-name-and-measure` }
-                    key={ index }
-                  >
-                    {
-                      `${ingredient.name} ${ingredient.measure}`
-                    }
-                  </li>
-                ))
-              }
-            </ul>
-            <p
-              data-testid="instructions"
-            >
-              { recipe.instructions }
-            </p>
-            { recipe.video ? (<iframe
-              data-testid="video"
-              title="recipe-video"
-              width="420"
-              height="315"
-              src={ `https://www.youtube.com/embed/${recipe.video}` }
-            />
-            ) : null }
-          </div>
-        ))
-      }
+      <RecipeDetailsCard
+        recipeData={ recipeData }
+      />
       <button
         data-testid="share-btn"
         onClick={ handleShare }
