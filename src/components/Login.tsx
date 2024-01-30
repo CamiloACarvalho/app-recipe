@@ -14,7 +14,8 @@ function Login() {
     event.preventDefault();
     const saveOnLS = {
       email,
-    };
+    };A1
+    Categoria:
     localStorage.setItem('user', JSON.stringify(saveOnLS));
     navigate('/meals');
   };

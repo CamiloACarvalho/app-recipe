@@ -73,6 +73,11 @@ function InProgressElements(
         data-testid="recipe-photo"
       />
 
+      <h3>
+        {(recipe as DrinkType).strAlcoholic === 'Alcoholic'
+          ? 'Alcoholic'
+          : 'Non Alcoholic'}
+      </h3>
       <ul>
         {ingredients.map((ingredient, i) => (
           <li
@@ -83,7 +88,8 @@ function InProgressElements(
               className="checkbox"
               type="checkbox"
               data-testid={ `${index}-${ingredient}-ingredient-step` }
-              onClick={ () => handleChecked(i) }
+              checked={ checkedIngredients[i] || false }
+              onChange={ () => handleChecked(i) }
             />
             {ingredient}
           </li>
