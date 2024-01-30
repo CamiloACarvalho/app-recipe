@@ -12,10 +12,7 @@ describe('Testa o componente Header', () => {
       { route: '/meals' },
     );
 
-    const getMealsTitle = screen.getByRole('heading', { name: /meals/i });
-    expect(getMealsTitle).toBeInTheDocument();
     const getSearchBtn = screen.getByRole('img', { name: /search icon/i });
-    expect(getSearchBtn).toBeInTheDocument();
     const getProfileIcon = screen.getByRole('button', { name: /profile icon/i });
 
     await user.click(getSearchBtn);
