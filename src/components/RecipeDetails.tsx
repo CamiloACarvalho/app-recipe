@@ -80,6 +80,7 @@ export default function RecipeDetails() {
     handleLocalFavorite(favoriteKey, setFavorite);
   };
 
+  if (recipes.length === 0 || recomendation.length === 0) return (<h1>Loading</h1>);
   return (
     <>
       <RecipeDetailsCard
@@ -98,6 +99,7 @@ export default function RecipeDetails() {
       {
         copiedPath && <span>Link copied!</span>
       }
+      {' '}
       <button
         onClick={ handleFavorite }
       >

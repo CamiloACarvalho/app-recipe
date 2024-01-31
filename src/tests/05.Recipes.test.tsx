@@ -9,7 +9,7 @@ describe('Testa o componente Header', async () => {
   beforeEach(() => {
     vi.spyOn(global, 'fetch').mockImplementation(fetchMock as any);
   });
-  test('01 - Verificando se os botões de categoria da tela de comidas funcionam', async () => {
+  test('01 - Verifican se os botões de categoria da tela de comidas funcionam', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
         <App />
