@@ -23,11 +23,13 @@ function SearchBar() {
 
   const handleClick = async () => {
     const data = await searchRecipes(searchType, location, searchValue);
-    if (data.meals === null || data.drinks === null) {
-      setRecipes([]);
-      return;
+    if (data !== undefined) {
+      if (data.meals === null || data.drinks === null) {
+        window.alert("Sorry, we haven't found any recipes for these filters");
+        return;
+      }
+      setRecipes(data.meals || data.drinks);
     }
-    setRecipes(data.meals || data.drinks);
   };
 
   return (
@@ -63,7 +65,7 @@ function SearchBar() {
           onChange={ ({ target }) => setSearchType(target.value) }
           data-testid="first-letter-search-radio"
         />
-        Primeira Letra
+        First letter
       </label>
       <button type="button" onClick={ handleClick } data-testid="exec-search-btn">
         Search
