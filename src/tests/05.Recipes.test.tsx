@@ -1,9 +1,14 @@
 import { screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
+import fetchMock from './Mocks/Mocks';
 
 describe('Testa o componente Header', async () => {
+  beforeEach(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(fetchMock as any);
+  });
   test('01 - Verificando se os botões de categoria da tela de comidas funcionam', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
@@ -13,7 +18,7 @@ describe('Testa o componente Header', async () => {
     );
 
     // Testando o botão de categoria Beef
-    const getBeefBtn = await screen.findByRole('button', { name: /beef/i });
+    const getBeefBtn = await screen.findByTestId('Beef-category-filter');
     await user.click(getBeefBtn);
 
     // Chamando a receita que está na tela
@@ -80,7 +85,6 @@ describe('Testa o componente Header', async () => {
     const getInitialDrink = await screen.findByText(/a1/i);
     expect(getInitialDrink).toBeInTheDocument();
 
-    // Verificando se estão todos os botões de busca por categoria
     const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
     expect(getOrdinaryBtn).toBeInTheDocument();
 
@@ -100,7 +104,6 @@ describe('Testa o componente Header', async () => {
     const getInitialDrink = await screen.findByText(/a1/i);
     expect(getInitialDrink).toBeInTheDocument();
 
-    // Verificando se estão todos os botões de busca por categoria
     const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
     expect(getOrdinaryBtn).toBeInTheDocument();
 
@@ -128,7 +131,6 @@ describe('Testa o componente Header', async () => {
     const getInitialDrink = await screen.findByText(/a1/i);
     expect(getInitialDrink).toBeInTheDocument();
 
-    // Verificando se estão todos os botões de busca por categoria
     const getOrdinaryBtn = await screen.findByRole('button', { name: /ordinary drink/i });
     expect(getOrdinaryBtn).toBeInTheDocument();
 

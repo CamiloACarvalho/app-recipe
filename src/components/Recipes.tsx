@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import SearchContext from '../context/SearchContext/SearchContext';
 import RecipeCard from './RecipeCard';
+import SearchContext from '../context/SearchContext/SearchContext';
 
 function Recipes() {
   const location = useLocation();
@@ -59,8 +59,8 @@ function Recipes() {
         });
     } else {
       const endpoint = mealPage
-        ? 'https://www.themealdb.com/api/json/v1/1/search.php?s='
-        : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+        ? mealEndpoint
+        : drinkEndpoint;
       fetch(endpoint)
         .then((response) => response.json())
         .then((data) => {
