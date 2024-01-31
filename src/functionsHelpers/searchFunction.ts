@@ -25,7 +25,8 @@ export const searchRecipes = async (
         window.alert('Your search must have only 1 (one) character');
       }
       break;
-      // no default
+    default:
+      console.log('Algo deu errado na busca pelos radio buttons');
   }
 
   if (endpoint) {
