@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Login from './components/Login';
 import RecipeDetails from './components/RecipeDetails';
 import Recipes from './components/Recipes';
+import FavoriteRecipes from './components/FavoriteRecipes';
 
 function App() {
   return (
@@ -18,6 +19,15 @@ function App() {
           <>
             <Header />
             <DoneRecipes />
+          </>
+        }
+      />
+      <Route
+        path="favorite-recipes"
+        element={
+          <>
+            <Header />
+            <FavoriteRecipes />
           </>
         }
       />

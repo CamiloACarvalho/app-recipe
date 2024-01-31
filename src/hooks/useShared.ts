@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useShare = (): any => {
+export const useShared = (): any => {
   const [copyLink, setCopyLink] = useState<string>('');
 
   const handleShared = async (id: number = 0, isDrink: boolean = false) => {
