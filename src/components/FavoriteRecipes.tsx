@@ -2,7 +2,7 @@ import FavoritesBtn from '../helpers/FavoritesBtn';
 import FavoritesCard from '../helpers/FavoritesCard';
 import { useFavoritesRecipies } from '../hooks/useFavoritesRecipes';
 
-function RecipesFavorites() {
+function FavoriteRecipes() {
   const {
     handleFilterMeal,
     handleFilterDrink,
@@ -44,4 +44,4 @@ function RecipesFavorites() {
   );
 }
 
-export default RecipesFavorites;
+export default FavoriteRecipes;
