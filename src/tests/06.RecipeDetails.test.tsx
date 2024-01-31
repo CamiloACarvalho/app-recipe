@@ -1,4 +1,4 @@
-import { getByTestId, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
