@@ -53,8 +53,6 @@ export default function RecipeDetails() {
     }
   }, [params.id, location.pathname, setFavorite]);
 
-  console.log(recipes);
-
   const recipeData = location.pathname.includes('/meals/')
     ? recipes?.map((recipe) => mapData(recipe, 'Meal'))
     : recipes?.map((recipe) => mapData(recipe, 'Drink'));

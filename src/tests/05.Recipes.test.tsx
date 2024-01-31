@@ -1,9 +1,14 @@
 import { screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
+import fetchMock from './Mocks/Mocks';
 
 describe('Testa o componente Header', async () => {
+  beforeEach(() => {
+    vi.spyOn(global, 'fetch').mockImplementation(fetchMock as any);
+  });
   test('01 - Verificando se os botões de categoria da tela de comidas funcionam', async () => {
     const { user } = renderWithRouter(
       <SearchProvider>
