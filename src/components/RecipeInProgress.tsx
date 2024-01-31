@@ -4,6 +4,9 @@ import SearchContext from '../context/SearchContext/SearchContext';
 import InProgressElements from './InProgressElements';
 import fullHeartIcon from '../images/blackHeartIcon.svg';
 import emptyHeartIcon from '../images/whiteHeartIcon.svg';
+import finishIcon from '../images/icons8-done.svg';
+import shareRecipe from '../images/shareIcon.svg';
+import styles from './InProgressElements.module.css';
 
 function Recipes() {
   const location = useLocation();
@@ -119,6 +122,7 @@ function Recipes() {
       </div>
       <button
         type="button"
+        className={ styles.Btn }
         data-testid="favorite-btn"
         onClick={ handleToggleFavorite }
       >
@@ -130,21 +134,24 @@ function Recipes() {
       <button
         type="button"
         data-testid="share-btn"
+        className={ styles.Btn }
         onClick={ handleShareLinkRecipeInProgress }
       >
         <img
-          src="src/images/shareIcon.svg"
+          className={ styles.img }
+          src={ shareRecipe }
           alt="share icon"
         />
       </button>
       <button
         type="button"
+        className={ `${enableFinishButton ? styles.Btn : styles.BtnOff}` }
         data-testid="finish-recipe-btn"
         disabled={ !enableFinishButton }
         onClick={ handleFineshedRecipe }
       >
         <img
-          src="src/images/icons8-done.svg"
+          src={ finishIcon }
           alt="checked icon"
         />
       </button>
