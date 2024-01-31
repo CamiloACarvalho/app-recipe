@@ -6,12 +6,14 @@ type InProgressProps = {
   recipe: MealType | DrinkType;
   index: number;
   onIngredientChecked: (isChecked: boolean) => void;
+  allChecked: (allCheckedBox: { [key: string]: boolean }) => void;
 };
 
 function InProgressElements({
   recipe,
   index,
   onIngredientChecked,
+  allChecked,
 }: InProgressProps) {
   const localStorageKey = `inProgressRecipes-${index}`;
   const [ingredients, setIngredients] = useState<[string, string][]>([]);
@@ -21,13 +23,31 @@ function InProgressElements({
     [key: string]: boolean;
   }>(storedProgress);
 
+  const saveCheckedBox = (allIngredients: { [key: string]: boolean }) => {
+    const salvaLengthIngredients = ingredients.length;
+
+    const conditionCheckedIngredients = Object.keys(allIngredients)
+      .length === salvaLengthIngredients;
+
+    if (conditionCheckedIngredients) {
+      allChecked(allIngredients);
+    }
+  };
+
   const handleChecked = (ingredientIndex: number) => {
+    // verificando se o ingrediente já está marcado
     setCheckedIngredients((prevCheckedIngredients) => {
+      // se o ingrediente já estiver marcado, desmarca
       const newCheckedIngredients = { ...prevCheckedIngredients };
       newCheckedIngredients[ingredientIndex] = !newCheckedIngredients[ingredientIndex];
 
+      // allChecked(newCheckedIngredients);
+      saveCheckedBox(newCheckedIngredients);
+
+      // salvando no localStorage
       localStorage.setItem(localStorageKey, JSON.stringify(newCheckedIngredients));
 
+      // chamando a função que atualiza o estado do componente pai
       onIngredientChecked(newCheckedIngredients[ingredientIndex]);
 
       return newCheckedIngredients;

@@ -2,15 +2,17 @@ import { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import SearchContext from '../context/SearchContext/SearchContext';
 import InProgressElements from './InProgressElements';
+import fullHeartIcon from '../images/blackHeartIcon.svg';
+import emptyHeartIcon from '../images/whiteHeartIcon.svg';
 
 function Recipes() {
   const location = useLocation();
   const navigate = useNavigate();
-
   const { recipes, setRecipes } = useContext(SearchContext);
   const [favorite, setFavorite] = useState(false);
   const [concludedRecipe, setConcludedRecipe] = useState<boolean []>([]);
   const { id } = useParams<{ id: string }>();
+  const [enableFinishButton, setEnableFinishButton] = useState(false);
 
   const mealEndpoint = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=';
   const drinkEndpoint = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=';
@@ -30,6 +32,15 @@ function Recipes() {
       });
   }, [setRecipes, location.pathname, id]);
 
+  const allChecked = (allCheckedBox: { [key: string]: boolean }) => {
+    const verifyAllChecked = Object.values(allCheckedBox).every((isChecked) => isChecked);
+    if (verifyAllChecked) {
+      setEnableFinishButton(true);
+    } else {
+      setEnableFinishButton(false);
+    }
+  };
+
   const handleChecked = (recipeIndex: number, isChecked: boolean) => {
     setConcludedRecipe((prevConcludedRecipe) => {
       const newConcludedRecipes = [...prevConcludedRecipe];
@@ -37,8 +48,6 @@ function Recipes() {
       return newConcludedRecipes;
     });
   };
-
-  const enableFinishButton = concludedRecipe.every((value) => value);
 
   const handleToggleFavorite = () => {
     setFavorite(!favorite);
@@ -53,10 +62,10 @@ function Recipes() {
 
     navigator.clipboard.writeText(link)
       .then(() => {
-        console.log('Link copiado com sucesso!');
+        alert('Link copied!');
       })
-      .catch((error) => {
-        console.error('Erro ao copiar o link:', error);
+      .catch(() => {
+        alert('Erro ao copiar o link:');
       });
   };
 
@@ -103,6 +112,7 @@ function Recipes() {
               onIngredientChecked={
                 (isChecked: boolean) => handleChecked(index, isChecked)
               }
+              allChecked={ allChecked }
             />
           ))
         }
@@ -113,10 +123,7 @@ function Recipes() {
         onClick={ handleToggleFavorite }
       >
         <img
-          { ...favorite
-            ? { src: 'src/images/blackHeartIcon.svg' }
-            : { src: 'src/images/whiteHeartIcon.svg' }
-          }
+          src={ favorite ? fullHeartIcon : emptyHeartIcon }
           alt="favorite icon"
         />
       </button>
