@@ -52,9 +52,31 @@ function Recipes() {
     });
   };
 
-  const handleToggleFavorite = () => {
-    setFavorite(!favorite);
-    // Preciso criar outro componente de FavoriteRecipes para complementar essa função
+  const handleToggleFavorite = async () => {
+    const mealPage = location.pathname.split('/')[1] === 'meals';
+    const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
+
+    const favoriteRecipe = fetch(`${endpoint}${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const recipeType = mealPage ? 'meals' : 'drinks';
+        const fetchedRecipes = data[recipeType];
+        const recipe = fetchedRecipes[0];
+
+        const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+        const newDoneRecipe = {
+          id: recipe[`id${recipeType.slice(0, 1).toUpperCase()}${recipeType.slice(1)}`],
+          type: recipeType.slice(0, -1),
+          area: recipe.strArea || '',
+          category: recipe.strCategory || '',
+          alcoholicOrNot: recipe.strAlcoholic || '',
+          name: recipe[`str${recipeType.slice(0, 1)
+            .toUpperCase()}${recipeType.slice(1)}`],
+          image: recipe[`str${recipeType.slice(0, 1)
+            .toUpperCase()}${recipeType.slice(1)}Thumb`],
+        };
+      });
+    // Preciso continuar daqui para salvar as receitas favoritas dentro do localStorage
   };
 
   const handleShareLinkRecipeInProgress = () => {
@@ -72,15 +94,55 @@ function Recipes() {
       });
   };
 
+  // const addDoneRecipeToLocalStorage = () => {
+  //   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+  //   localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+  // };
+
+  // const handleFineshedRecipe = () => {
+  //   const mealPage = location.pathname.split('/')[1] === 'meals';
+  //   const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
+  //   fetch(`${endpoint}${id}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const recipeType = mealPage ? 'meals' : 'drinks';
+  //       const fetchedRecipes = data[recipeType];
+  //       const recipe = fetchedRecipes[0];
+  //       const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+  //       const newDoneRecipe = {
+  //         id: recipe[`id${recipeType.slice(0, 1).toUpperCase()}${recipeType.slice(1)}`],
+  //         type: recipeType.slice(0, -1),
+  //         area: recipe.strArea || '',
+  //         category: recipe.strCategory || '',
+  //         alcoholicOrNot: recipe.strAlcoholic || '',
+  //         name: recipe[`str${recipeType.slice(0, 1)
+  //           .toUpperCase()}${recipeType.slice(1)}`],
+  //         image: recipe[`str${recipeType.slice(0, 1)
+  //           .toUpperCase()}${recipeType.slice(1)}Thumb`],
+  //         doneDate: new Date().toLocaleDateString('pt-BR'),
+  //         tags: recipe.strTags ? recipe.strTags.split(',') : [],
+  //       };
+  //       doneRecipes.push(newDoneRecipe);
+  //       localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
+
+  //       addDoneRecipeToLocalStorage();
+
+  //       // Redirecionamento para /done-recipes
+  //       navigate('/done-recipes');
+  //     });
+  // };
+
   const handleFineshedRecipe = () => {
     const mealPage = location.pathname.split('/')[1] === 'meals';
     const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
+
     fetch(`${endpoint}${id}`)
       .then((response) => response.json())
       .then((data) => {
         const recipeType = mealPage ? 'meals' : 'drinks';
         const fetchedRecipes = data[recipeType];
         const recipe = fetchedRecipes[0];
+
         const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
         const newDoneRecipe = {
           id: recipe[`id${recipeType.slice(0, 1).toUpperCase()}${recipeType.slice(1)}`],
@@ -95,6 +157,7 @@ function Recipes() {
           doneDate: new Date().toLocaleDateString('pt-BR'),
           tags: recipe.strTags ? recipe.strTags.split(',') : [],
         };
+
         doneRecipes.push(newDoneRecipe);
         localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
 
