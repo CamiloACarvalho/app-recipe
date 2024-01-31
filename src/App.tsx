@@ -7,7 +7,7 @@ import Header from './components/Header';
 import Login from './components/Login';
 import RecipeDetails from './components/RecipeDetails';
 import Recipes from './components/Recipes';
-import RecipesFavorites from './components/RecipesFavorites';
+import FavoriteRecipes from './components/FavoriteRecipes';
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
         element={
           <>
             <Header />
-            <RecipesFavorites />
+            <FavoriteRecipes />
           </>
         }
       />
