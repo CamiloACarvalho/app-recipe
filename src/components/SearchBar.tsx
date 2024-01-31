@@ -11,13 +11,9 @@ function SearchBar() {
   const { recipes, setRecipes, searchValue } = useContext(SearchContext);
 
   useEffect(() => {
-    if (recipes) {
-      if (recipes.length === 0) {
-        // window.alert("Sorry, we haven't found any recipes for these filters");
-      } else if (recipes.length === 1 && Object.keys(recipes[0]).length > 3) {
-        navigate(`${location.pathname}/${(recipes[0] as MealType).idMeal
+    if (recipes.length === 1 && Object.keys(recipes[0]).length > 3) {
+      navigate(`${location.pathname}/${(recipes[0] as MealType).idMeal
           || (recipes[0] as DrinkType).idDrink}`);
-      }
     }
   }, [location.pathname, navigate, recipes]);
 
