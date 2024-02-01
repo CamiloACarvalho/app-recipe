@@ -9,6 +9,7 @@ import RecipeDetails from './components/RecipeDetails';
 import RecipeInProgress from './components/RecipeInProgress';
 import Recipes from './components/Recipes';
 import FavoriteRecipes from './components/FavoriteRecipes';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
         path="/profile"
         element={
           <>
+            <Profile />
             <Header />
             <Footer />
           </>
