@@ -6,45 +6,76 @@ type InProgressProps = {
   recipe: MealType | DrinkType;
   index: number;
   onIngredientChecked: (isChecked: boolean) => void;
+  allChecked: (allCheckedBox: { [key: string]: boolean }) => void;
 };
 
-function InProgressElements(
-  {
-    recipe,
-    index,
-    onIngredientChecked,
-  }: InProgressProps,
-) {
+function InProgressElements({
+  recipe,
+  index,
+  onIngredientChecked,
+  allChecked,
+}: InProgressProps) {
   const localStorageKey = `inProgressRecipes-${index}`;
+  const [ingredients, setIngredients] = useState<[string, string][]>([]);
+  const [mensure, setMensure] = useState<[string, string][]>([]);
   const storedProgress = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
-
   const [checkedIngredients, setCheckedIngredients] = useState<{
     [key: string]: boolean;
   }>(storedProgress);
 
-  const ingredients = [];
+  const saveCheckedBox = (allIngredients: { [key: string]: boolean }) => {
+    const salvaLengthIngredients = ingredients.length;
 
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = (recipe as any)[`strIngredient${i}`];
-    const measure = (recipe as any)[`strMeasure${i}`];
+    const conditionCheckedIngredients = Object.keys(allIngredients)
+      .length === salvaLengthIngredients;
 
-    if (ingredient && measure) {
-      ingredients.push(`${ingredient}: ${measure}`);
+    if (conditionCheckedIngredients) {
+      allChecked(allIngredients);
     }
-  }
+  };
 
   const handleChecked = (ingredientIndex: number) => {
+    // verificando se o ingrediente já está marcado
     setCheckedIngredients((prevCheckedIngredients) => {
+      // se o ingrediente já estiver marcado, desmarca
       const newCheckedIngredients = { ...prevCheckedIngredients };
       newCheckedIngredients[ingredientIndex] = !newCheckedIngredients[ingredientIndex];
 
+      // allChecked(newCheckedIngredients);
+      saveCheckedBox(newCheckedIngredients);
+
+      // salvando no localStorage
       localStorage.setItem(localStorageKey, JSON.stringify(newCheckedIngredients));
 
+      // chamando a função que atualiza o estado do componente pai
       onIngredientChecked(newCheckedIngredients[ingredientIndex]);
 
       return newCheckedIngredients;
     });
   };
+
+  useEffect(() => {
+    const ingredientesOfRecipe = Object.entries(recipe);
+
+    const ingredientsOfRecipe = ingredientesOfRecipe.filter((entry) => {
+      const [key] = entry;
+      return key.includes('strIngredient');
+    }) as [string, string][];
+
+    const onlyIngredientsValid = ingredientsOfRecipe
+      .filter((entry) => entry[1] !== null && entry[1] !== '');
+
+    const mensureOfRecipe = ingredientesOfRecipe.filter((entry) => {
+      const [key] = entry;
+      return key.includes('strMeasure');
+    }) as [string, string][];
+
+    const onlyMensureValid = mensureOfRecipe
+      .filter((entry) => entry[1] !== null && entry[1] !== '');
+
+    setIngredients(onlyIngredientsValid);
+    setMensure(onlyMensureValid);
+  }, [recipe]);
 
   useEffect(() => {
     return () => {
@@ -73,19 +104,27 @@ function InProgressElements(
         data-testid="recipe-photo"
       />
 
+      <h3>
+        {(recipe as DrinkType).strAlcoholic === 'Alcoholic'
+          ? 'Alcoholic'
+          : 'Non Alcoholic'}
+      </h3>
+
       <ul>
         {ingredients.map((ingredient, i) => (
-          <li
-            key={ i }
-            className={ checkedIngredients[i] ? styles.checkedIngredient : '' }
-          >
-            <input
-              className="checkbox"
-              type="checkbox"
-              data-testid={ `${index}-${ingredient}-ingredient-step` }
-              onClick={ () => handleChecked(i) }
-            />
-            {ingredient}
+          <li key={ i }>
+            <label
+              className={ checkedIngredients[i] ? styles.checkedIngredient : '' }
+              data-testid={ `${i}-ingredient-step` }
+            >
+              <input
+                className="checkbox"
+                type="checkbox"
+                checked={ checkedIngredients[i] || false }
+                onChange={ () => handleChecked(i) }
+              />
+              { `${ingredient[1]}: ${mensure[i][1]}` }
+            </label>
           </li>
         ))}
       </ul>

@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Login from './components/Login';
 import RecipeDetails from './components/RecipeDetails';
+import RecipeInProgress from './components/RecipeInProgress';
 import Recipes from './components/Recipes';
 import FavoriteRecipes from './components/FavoriteRecipes';
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={ <Login /> } />
+      <Route path="/done-recipes" element={ <DoneRecipes /> } />
       <Route
         path="done-recipes"
         element={
@@ -42,7 +44,7 @@ function App() {
         }
       />
       <Route
-        path="/drinks/*"
+        path="/drinks"
         element={
           <>
             <Header />
@@ -51,10 +53,26 @@ function App() {
           </>
         }
       />
-      <Route path="/meals/:id/*" element={ <RecipeDetails /> } />
-      <Route path="/drinks/:id/*" element={ <RecipeDetails /> } />
-      <Route path="/meals/:id/in-progress/*" />
-      <Route path="/drinks/:id/in-progress/*" />
+      <Route path="/meals/:id" element={ <RecipeDetails /> } />
+      <Route path="/drinks/:id" element={ <RecipeDetails /> } />
+      <Route
+        path="/meals/:id/in-progress"
+        element={
+          <>
+            <Header />
+            <RecipeInProgress />
+          </>
+        }
+      />
+      <Route
+        path="/drinks/:id/in-progress"
+        element={
+          <>
+            <Header />
+            <RecipeInProgress />
+          </>
+        }
+      />
       <Route
         path="/profile"
         element={
