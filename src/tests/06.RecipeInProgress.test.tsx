@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
-import OneDrinkMock from './mocks/OneDrinkMock';
+import OneDrinkMock from './RecipeInProgressMOCK/OneDrinkMock';
 
 describe('Teste para o componente Recipe In Progress', async () => {
   beforeEach(() => vi
@@ -78,18 +78,45 @@ describe('Teste para o componente Recipe In Progress', async () => {
 
     const message = await screen.findByTestId('mensage');
     expect(message).toBeInTheDocument();
-      // erro. Preciso descobrir para esperar x segundos
-    jest.advanceTimersByTime(1000);
-
-    await waitFor(() => {
-      expect(message).not.toBeInTheDocument();
-    });
 
     const favoriteButton = screen.getByTestId('favorite-btn');
-    expect(favoriteButton).toHaveAttribute('src', '/whiteHeartIcon.svg');
+    expect(favoriteButton).toHaveAttribute('src', '/src/images/whiteHeartIcon.svg');
 
     userEvent.click(favoriteButton);
 
-    expect(favoriteButton).toHaveAttribute('src', '/blackHeartIcon.svg');
+    expect(favoriteButton).toHaveAttribute('src', '/src/images/whiteHeartIcon.svg');
+
+    const doneButton = screen.getByTestId('finish-recipe-btn');
+    expect(doneButton).toBeDisabled();
+
+    const inputCheck0 = await screen.findByTestId('0-checkbox');
+    expect(inputCheck0).toBeInTheDocument();
+    expect(inputCheck0).not.toBeChecked();
+
+    await userEvent.click(inputCheck0);
+
+    expect(inputCheck0).toBeChecked();
+
+    expect(doneButton).toBeDisabled();
+
+    const inputCheck1 = await screen.findByTestId('1-checkbox');
+    expect(inputCheck1).toBeInTheDocument();
+    expect(inputCheck1).not.toBeChecked();
+
+    await userEvent.click(inputCheck1);
+
+    expect(inputCheck1).toBeChecked();
+
+    expect(doneButton).toBeDisabled();
+
+    const inputCheck2 = await screen.findByTestId('2-checkbox');
+    expect(inputCheck2).toBeInTheDocument();
+    expect(inputCheck2).not.toBeChecked();
+
+    await userEvent.click(inputCheck2);
+
+    expect(inputCheck2).toBeChecked();
+
+    expect(doneButton).toBeEnabled();
   });
 });

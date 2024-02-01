@@ -112,6 +112,7 @@ function InProgressElements({
               data-testid={ `${i}-ingredient-step` }
             >
               <input
+                data-testid={ `${i}-checkbox` }
                 className="checkbox"
                 type="checkbox"
                 checked={ checkedIngredients[i] || false }
