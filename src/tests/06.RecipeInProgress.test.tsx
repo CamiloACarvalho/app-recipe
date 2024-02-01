@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import App from '../App';
@@ -72,6 +72,24 @@ describe('Teste para o componente Recipe In Progress', async () => {
       { route: '/drinks/178319/in-progress' },
     );
 
-    
+    const shareButton = screen.getByTestId('share-btn');
+
+    userEvent.click(shareButton);
+
+    const message = await screen.findByTestId('mensage');
+    expect(message).toBeInTheDocument();
+      // erro. Preciso descobrir para esperar x segundos
+    jest.advanceTimersByTime(1000);
+
+    await waitFor(() => {
+      expect(message).not.toBeInTheDocument();
+    });
+
+    const favoriteButton = screen.getByTestId('favorite-btn');
+    expect(favoriteButton).toHaveAttribute('src', '/whiteHeartIcon.svg');
+
+    userEvent.click(favoriteButton);
+
+    expect(favoriteButton).toHaveAttribute('src', '/blackHeartIcon.svg');
   });
 });

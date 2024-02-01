@@ -153,7 +153,7 @@ function RecipesInProgress() {
           ))
         }
       </div>
-      { showCopiLink && <h2>Link copied!</h2>}
+      { showCopiLink && <h2 data-testid="mensage">Link copied!</h2>}
       <button
         type="button"
         className={ styles.Btn }
