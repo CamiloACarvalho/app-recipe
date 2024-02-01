@@ -8,11 +8,12 @@ import finishIcon from '../images/icons8-done.svg';
 import shareRecipe from '../images/shareIcon.svg';
 import styles from './InProgressElements.module.css';
 
-function Recipes() {
+function RecipesInProgress() {
   const location = useLocation();
   const navigate = useNavigate();
   const { recipes, setRecipes } = useContext(SearchContext);
   const [favorite, setFavorite] = useState(false);
+  const [showCopiLink, setShowCopyLink] = useState(false);
   const [concludedRecipe, setConcludedRecipe] = useState<boolean []>([]);
   const { id } = useParams<{ id: string }>();
   const [enableFinishButton, setEnableFinishButton] = useState(false);
@@ -33,6 +34,12 @@ function Recipes() {
         setRecipes(fetchedRecipes);
         setConcludedRecipe(new Array(fetchedRecipes.length).fill(false));
       });
+
+    const favoriteRecipesSave = JSON
+      .parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const isFavoriteRecipe = favoriteRecipesSave
+      .some((recipeSave: any) => recipeSave.id === id);
+    setFavorite(isFavoriteRecipe);
   }, [setRecipes, location.pathname, id]);
 
   const allChecked = (allCheckedBox: { [key: string]: boolean }) => {
@@ -53,30 +60,32 @@ function Recipes() {
   };
 
   const handleToggleFavorite = async () => {
-    const mealPage = location.pathname.split('/')[1] === 'meals';
-    const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
+    const addFavoriteRecipe = {
+      id: recipes[0].idMeal || recipes[0].idDrink,
+      type: recipes[0].idMeal ? 'meal' : 'drink',
+      nationality: recipes[0].strArea || '',
+      category: recipes[0].strCategory || '',
+      alcoholicOrNot: recipes[0].strAlcoholic || '',
+      name: recipes[0].strMeal || recipes[0].strDrink,
+      image: recipes[0].strMealThumb || recipes[0].strDrinkThumb,
+    };
 
-    const favoriteRecipe = fetch(`${endpoint}${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const recipeType = mealPage ? 'meals' : 'drinks';
-        const fetchedRecipes = data[recipeType];
-        const recipe = fetchedRecipes[0];
+    const favoriteRecipesSave = JSON
+      .parse(localStorage.getItem('favoriteRecipes') || '[]');
 
-        const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
-        const newDoneRecipe = {
-          id: recipe[`id${recipeType.slice(0, 1).toUpperCase()}${recipeType.slice(1)}`],
-          type: recipeType.slice(0, -1),
-          area: recipe.strArea || '',
-          category: recipe.strCategory || '',
-          alcoholicOrNot: recipe.strAlcoholic || '',
-          name: recipe[`str${recipeType.slice(0, 1)
-            .toUpperCase()}${recipeType.slice(1)}`],
-          image: recipe[`str${recipeType.slice(0, 1)
-            .toUpperCase()}${recipeType.slice(1)}Thumb`],
-        };
-      });
-    // Preciso continuar daqui para salvar as receitas favoritas dentro do localStorage
+    const isFavorite = favoriteRecipesSave
+      .some((recipeLiked: any) => recipeLiked.id === addFavoriteRecipe.id);
+
+    if (isFavorite) {
+      const newFavoriteRecipes = favoriteRecipesSave
+        .filter((recipeLiked: any) => recipeLiked.id !== addFavoriteRecipe.id);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
+      setFavorite(false);
+    } else {
+      const newFavoriteRecipes = [...favoriteRecipesSave, addFavoriteRecipe];
+      localStorage.setItem('favoriteRecipes', JSON.stringify(newFavoriteRecipes));
+      setFavorite(true);
+    }
   };
 
   const handleShareLinkRecipeInProgress = () => {
@@ -87,83 +96,34 @@ function Recipes() {
 
     navigator.clipboard.writeText(link)
       .then(() => {
-        alert('Link copied!');
+        setShowCopyLink(true);
+        setTimeout(() => {
+          setShowCopyLink(false);
+        }, 3000);
       })
       .catch(() => {
         alert('Erro ao copiar o link:');
       });
   };
 
-  // const addDoneRecipeToLocalStorage = () => {
-  //   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
-  //   localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-  // };
-
-  // const handleFineshedRecipe = () => {
-  //   const mealPage = location.pathname.split('/')[1] === 'meals';
-  //   const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
-  //   fetch(`${endpoint}${id}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const recipeType = mealPage ? 'meals' : 'drinks';
-  //       const fetchedRecipes = data[recipeType];
-  //       const recipe = fetchedRecipes[0];
-  //       const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
-  //       const newDoneRecipe = {
-  //         id: recipe[`id${recipeType.slice(0, 1).toUpperCase()}${recipeType.slice(1)}`],
-  //         type: recipeType.slice(0, -1),
-  //         area: recipe.strArea || '',
-  //         category: recipe.strCategory || '',
-  //         alcoholicOrNot: recipe.strAlcoholic || '',
-  //         name: recipe[`str${recipeType.slice(0, 1)
-  //           .toUpperCase()}${recipeType.slice(1)}`],
-  //         image: recipe[`str${recipeType.slice(0, 1)
-  //           .toUpperCase()}${recipeType.slice(1)}Thumb`],
-  //         doneDate: new Date().toLocaleDateString('pt-BR'),
-  //         tags: recipe.strTags ? recipe.strTags.split(',') : [],
-  //       };
-  //       doneRecipes.push(newDoneRecipe);
-  //       localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-
-  //       addDoneRecipeToLocalStorage();
-
-  //       // Redirecionamento para /done-recipes
-  //       navigate('/done-recipes');
-  //     });
-  // };
-
   const handleFineshedRecipe = () => {
-    const mealPage = location.pathname.split('/')[1] === 'meals';
-    const endpoint = mealPage ? mealEndpoint : drinkEndpoint;
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+    const newDoneRecipe = {
+      id: recipes[0].idMeal || recipes[0].idDrink,
+      type: recipes[0].idMeal ? 'meal' : 'drink',
+      nationality: recipes[0].strArea || '',
+      category: recipes[0].strCategory || '',
+      alcoholicOrNot: recipes[0].strAlcoholic || '',
+      name: recipes[0].strMeal || recipes[0].strDrink,
+      image: recipes[0].strMealThumb || recipes[0].strDrinkThumb,
+      doneDate: new Date(),
+      tags: recipes[0].strTags?.split(',') || [],
+    };
 
-    fetch(`${endpoint}${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const recipeType = mealPage ? 'meals' : 'drinks';
-        const fetchedRecipes = data[recipeType];
-        const recipe = fetchedRecipes[0];
+    doneRecipes.push(newDoneRecipe);
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
 
-        const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
-        const newDoneRecipe = {
-          id: recipe[`id${recipeType.slice(0, 1).toUpperCase()}${recipeType.slice(1)}`],
-          type: recipeType.slice(0, -1),
-          area: recipe.strArea || '',
-          category: recipe.strCategory || '',
-          alcoholicOrNot: recipe.strAlcoholic || '',
-          name: recipe[`str${recipeType.slice(0, 1)
-            .toUpperCase()}${recipeType.slice(1)}`],
-          image: recipe[`str${recipeType.slice(0, 1)
-            .toUpperCase()}${recipeType.slice(1)}Thumb`],
-          doneDate: new Date().toLocaleDateString('pt-BR'),
-          tags: recipe.strTags ? recipe.strTags.split(',') : [],
-        };
-
-        doneRecipes.push(newDoneRecipe);
-        localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
-
-        // Redirecionamento para /done-recipes
-        navigate('/done-recipes');
-      });
+    navigate('/done-recipes');
   };
 
   return (
@@ -183,20 +143,20 @@ function Recipes() {
           ))
         }
       </div>
+      { showCopiLink && <h2>Link copied!</h2>}
       <button
         type="button"
         className={ styles.Btn }
-        data-testid="favorite-btn"
         onClick={ handleToggleFavorite }
       >
         <img
           src={ favorite ? fullHeartIcon : emptyHeartIcon }
           alt="favorite icon"
+          data-testid="favorite-btn"
         />
       </button>
       <button
         type="button"
-        data-testid="share-btn"
         className={ styles.Btn }
         onClick={ handleShareLinkRecipeInProgress }
       >
@@ -204,6 +164,7 @@ function Recipes() {
           className={ styles.img }
           src={ shareRecipe }
           alt="share icon"
+          data-testid="share-btn"
         />
       </button>
       <button
@@ -221,4 +182,4 @@ function Recipes() {
     </main>
   );
 }
-export default Recipes;
+export default RecipesInProgress;
