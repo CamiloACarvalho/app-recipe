@@ -67,8 +67,6 @@ describe('Testa a tela de detalhes das receitas', () => {
       { route: '/meals/52977' },
     );
 
-    await screen.findByText('Corba');
-    screen.debug();
     const getCarouselBtn = container.getElementsByClassName('carousel-control-next-icon');
     await user.click(getCarouselBtn[0]);
     const getNextItem = screen.getByTestId('2-recommendation-title');
