@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import App from '../App';
@@ -118,5 +118,11 @@ describe('Teste para o componente Recipe In Progress', async () => {
     expect(inputCheck2).toBeChecked();
 
     expect(doneButton).toBeEnabled();
+
+    await userEvent.click(doneButton);
+
+    const btnOtherPage = await screen.findByTestId('filter-by-meal-btn');
+    expect(btnOtherPage).toBeInTheDocument();
+    
   });
 });

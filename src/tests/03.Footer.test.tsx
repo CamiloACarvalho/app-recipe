@@ -5,6 +5,7 @@ import { renderWithRouter } from '../utils/renderWithRouter';
 
 describe('Testa o componente Footer', () => {
   test('03 - Testa se a navegação é feita corretamente ao clicar nos ícones de comida e bebida', async () => {
+
     const { user } = renderWithRouter(
       <SearchProvider>
         <App />
