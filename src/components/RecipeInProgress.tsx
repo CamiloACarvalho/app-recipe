@@ -43,8 +43,17 @@ function RecipesInProgress() {
     setFavorite(isFavoriteRecipe);
   }, [setRecipes, location.pathname, id]);
 
+  useEffect(() => {
+    const localStorageChecked = localStorage.getItem('inProgressRecipes-0');
+    const checkSave = localStorageChecked && JSON.parse(localStorageChecked);
+    if (checkSave) {
+      allChecked(checkSave);
+    }
+  }, []);
+
   const allChecked = (allCheckedBox: { [key: string]: boolean }) => {
     const verifyAllChecked = Object.values(allCheckedBox).every((isChecked) => isChecked);
+
     if (verifyAllChecked) {
       setEnableFinishButton(true);
     } else {
