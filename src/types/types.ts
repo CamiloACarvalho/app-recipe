@@ -144,3 +144,47 @@ export type DoneRecipesBtnProps = {
   handleMealFilter: () => void;
   handleDrinkFilter: () => void;
 };
+
+export type FavoriteKey = {
+  id: string | undefined;
+  type: string | undefined;
+  nationality: string | undefined;
+  category: string | undefined;
+  alcoholicOrNot: string | undefined;
+  name: string | undefined;
+  image: string | undefined;
+};
+
+export type CarouselCardProps = {
+  recomendation: MealType[] | DrinkType[];
+  handleSelect: (selectedIndex: number) => void;
+  carouselIndex: number;
+};
+
+export type Recipes = MealType[] | DrinkType[];
+
+export type Ingredient = {
+  name: string;
+  measure: string;
+};
+
+export type RecipeCardData = {
+  id: number;
+  thumbnail: string;
+  name: string;
+  category: string;
+  alcoholic?: string;
+  ingredients: Ingredient[];
+  instructions: string;
+  video?: string;
+};
+
+export type Favorites = {
+  id: string;
+  type: string;
+  nationality: string;
+  category: string;
+  alcoholicOrNot: string;
+  name: string;
+  image: string;
+};
