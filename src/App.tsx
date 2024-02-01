@@ -15,6 +15,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={ <Login /> } />
+      <Route path="/done-recipes" element={ <DoneRecipes /> } />
       <Route
         path="done-recipes"
         element={
@@ -83,6 +84,8 @@ function App() {
           </>
         }
       />
+      <Route path="/done-recipes" element={ <Header /> } />
+      <Route path="/favorite-recipes" element={ <Header /> } />
     </Routes>
   );
 }
