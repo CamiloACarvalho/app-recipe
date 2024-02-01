@@ -98,7 +98,7 @@ function InProgressElements({
         data-testid="recipe-photo"
       />
 
-      <h3>
+      <h3 data-testid="it-has-alchool">
         {(recipe as DrinkType).strAlcoholic === 'Alcoholic'
           ? 'Alcoholic'
           : 'Non Alcoholic'}
@@ -127,7 +127,10 @@ function InProgressElements({
         {(recipe as MealType).strInstructions || (recipe as DrinkType).strInstructions}
       </p>
 
-      <a href={ (recipe as MealType).strYoutube || (recipe as DrinkType).strVideo }>
+      <a
+        data-testid="video"
+        href={ (recipe as MealType).strYoutube || (recipe as DrinkType).strVideo }
+      >
         Assita ao vídeo
       </a>
     </div>
