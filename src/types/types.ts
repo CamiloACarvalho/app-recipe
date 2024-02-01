@@ -129,7 +129,7 @@ export type DoneRecipe = {
   nationality: string;
 };
 
-export type FavoriteRecipe = {
+export type FavoriteRecipeType = {
   id: string;
   type: string;
   category: string;

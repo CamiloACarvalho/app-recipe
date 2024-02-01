@@ -2,7 +2,6 @@ import { screen } from '@testing-library/react';
 import App from '../App';
 import SearchProvider from '../context/SearchContext/SearchProvider';
 import { renderWithRouter } from '../utils/renderWithRouter';
-import RecipesInProgress from '../components/RecipeInProgress';
 
 describe('Testa o componente Header', async () => {
   test('01 - Verificando se os elementos da tela de comidas estão presentes', async () => {

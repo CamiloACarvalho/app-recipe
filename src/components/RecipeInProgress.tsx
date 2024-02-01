@@ -39,6 +39,7 @@ function RecipesInProgress() {
       .parse(localStorage.getItem('favoriteRecipes') || '[]');
     const isFavoriteRecipe = favoriteRecipesSave
       .some((recipeSave: any) => recipeSave.id === id);
+
     setFavorite(isFavoriteRecipe);
   }, [setRecipes, location.pathname, id]);
 
