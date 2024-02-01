@@ -9,12 +9,12 @@ import RecipeDetails from './components/RecipeDetails';
 import RecipeInProgress from './components/RecipeInProgress';
 import Recipes from './components/Recipes';
 import FavoriteRecipes from './components/FavoriteRecipes';
+import Profile from './components/Profile';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={ <Login /> } />
-      <Route path="/done-recipes" element={ <DoneRecipes /> } />
       <Route
         path="done-recipes"
         element={
@@ -77,13 +77,12 @@ function App() {
         path="/profile"
         element={
           <>
+            <Profile />
             <Header />
             <Footer />
           </>
         }
       />
-      <Route path="/done-recipes" element={ <Header /> } />
-      <Route path="/favorite-recipes" element={ <Header /> } />
     </Routes>
   );
 }

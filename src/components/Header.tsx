@@ -22,15 +22,15 @@ function Header() {
       },
       '/profile': {
         title: 'Profile',
-        showSearch: false,
+        showSearch: true,
       },
       '/done-recipes': {
         title: 'Done Recipes',
-        showSearch: false,
+        showSearch: true,
       },
       '/favorite-recipes': {
         title: 'Favorite Recipes',
-        showSearch: false,
+        showSearch: true,
       },
     };
     const currentRoute = routeConfig[location.pathname as keyof typeof routeConfig];
