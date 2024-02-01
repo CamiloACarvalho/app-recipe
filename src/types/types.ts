@@ -129,6 +129,16 @@ export type DoneRecipe = {
   nationality: string;
 };
 
+export type FavoriteRecipe = {
+  id: string;
+  type: string;
+  category: string;
+  alcoholicOrNot: string;
+  name: string;
+  image: string;
+  nationality: string;
+};
+
 export type DoneRecipesBtnProps = {
   handleAllFilter: () => void;
   handleMealFilter: () => void;
