@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useShare } from '../hooks/useShared';
+import { useShared } from '../hooks/useShared';
 import { useDoneRecipes } from '../hooks/useDoneRecipes';
 import shareIcon from '../images/shareIcon.svg';
 import DoneRecipesLink from '../helpers/DoneRecipesLink';
@@ -7,7 +7,7 @@ import { DoneRecipe } from '../types/types';
 import DoneRecipiesButton from '../helpers/DoneRecipesButton';
 
 function DoneRecipes() {
-  const { handleShared, copyLink } = useShare();
+  const { handleShared, copyLink } = useShared();
   const {
     doneRecipes,
     handleMealFilter,

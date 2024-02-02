@@ -12,9 +12,9 @@
   font-size: 16px;
   margin: 4px 2px;
   padding: 15px 32px;
+  size: 20px;
   text-align: center;
   text-decoration: none;
-  size: 20px;
 }
 
 .BtnOff {
@@ -27,9 +27,9 @@
   font-size: 16px;
   margin: 4px 2px;
   padding: 15px 32px;
+  size: 20px;
   text-align: center;
   text-decoration: none;
-  size: 20px;
 }
 
 .Btn:hover {

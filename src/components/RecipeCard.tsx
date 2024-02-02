@@ -1,3 +1,4 @@
+import { Link, useLocation } from 'react-router-dom';
 import { DrinkType, MealType } from '../types/types';
 
 type RecipeCardProps = {
@@ -6,21 +7,27 @@ type RecipeCardProps = {
 };
 
 function RecipeCard({ recipe, index }: RecipeCardProps) {
+  const location = useLocation();
   return (
     <div
       key={ index }
       data-testid={ `${index}-recipe-card` }
     >
-      <img
-        src={ (recipe as MealType).strMealThumb || (recipe as DrinkType).strDrinkThumb }
-        alt="Recipe"
-        data-testid={ `${index}-card-img` }
-      />
-      <p
-        data-testid={ `${index}-card-name` }
+      <Link
+        to={ `${location.pathname}/${(recipe as MealType).idMeal
+          || (recipe as DrinkType).idDrink}` }
       >
-        {(recipe as MealType).strMeal || (recipe as DrinkType).strDrink}
-      </p>
+        <img
+          src={ (recipe as MealType).strMealThumb || (recipe as DrinkType).strDrinkThumb }
+          alt="Recipe"
+          data-testid={ `${index}-card-img` }
+        />
+        <p
+          data-testid={ `${index}-card-name` }
+        >
+          {(recipe as MealType).strMeal || (recipe as DrinkType).strDrink}
+        </p>
+      </Link>
     </div>
   );
 }

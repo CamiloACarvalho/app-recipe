@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export const useShare = (): any => {
+export const useShared = (): any => {
   const [copyLink, setCopyLink] = useState<string>('');
 
   const location = useLocation();

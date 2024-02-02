@@ -4,6 +4,9 @@
 // Padrão
 // -> www.the{meal or cocktail}db.com/api/json/v1/1/search.php?s={search}
 
+import { Dispatch, SetStateAction } from 'react';
+import { DrinkType, FavoriteKey, MealType, Recipes } from '../types/types';
+
 // -----------------------------------------------------------------------
 
 // buscar pela primeira letra
@@ -96,3 +99,48 @@ export const mapData = (item: any, type: string) => {
 
 export const mapDrinkData = (drink: any) => mapData(drink, 'Drink');
 export const mapMealData = (meal: any) => mapData(meal, 'Meal');
+
+export const handleFavoriteKey = (location: string, recipes: Recipes) => {
+  const mealPage = location.includes('/meals/');
+  const recipeType = mealPage ? 'meal' : 'drink';
+  const favoriteKey = {
+    id: (recipes[0] as MealType).idMeal || (recipes[0] as DrinkType).idDrink,
+    type: recipeType,
+    nationality: (recipes[0] as MealType).strArea || '',
+    category: (recipes[0] as MealType).strCategory,
+    alcoholicOrNot: (recipes[0] as DrinkType).strAlcoholic || '',
+    name: (recipes[0] as MealType).strMeal || (recipes[0] as DrinkType).strDrink,
+    image: (recipes[0] as MealType).strMealThumb
+      || (recipes[0] as DrinkType).strDrinkThumb,
+  };
+  return favoriteKey;
+};
+
+export const handleLocalFavorite = (
+  favoriteKey: FavoriteKey,
+  setFavorite: Dispatch<SetStateAction<boolean>>,
+) => {
+  const getFavorite = JSON.parse(
+    localStorage.getItem('favoriteRecipes') as string,
+  ) || [];
+  if (getFavorite.length > 0) {
+    let newArray = [];
+    const findDuplicate = getFavorite
+      .find((favoriteItem: FavoriteKey) => favoriteItem.id === favoriteKey.id);
+    if (findDuplicate) {
+      newArray = getFavorite
+        .filter((favoriteItem: FavoriteKey) => favoriteItem.id !== favoriteKey.id);
+      setFavorite(false);
+    } else {
+      newArray = [...getFavorite, favoriteKey];
+      setFavorite(true);
+    }
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newArray));
+  } else {
+    localStorage.setItem(
+      'favoriteRecipes',
+      JSON.stringify([favoriteKey]),
+    );
+    setFavorite(true);
+  }
+};
