@@ -1,6 +1,4 @@
 import { DoneRecipesBtnProps } from '../types/types';
-import mealIcon from '../images/mealIcon.svg';
-import drinkIcon from '../images/drinkIcon.svg';
 
 function DoneRecipiesButton({
   handleAllFilter,
@@ -21,7 +19,6 @@ function DoneRecipiesButton({
         data-testid="filter-by-meal-btn"
         onClick={ handleMealFilter }
       >
-        <img src={ mealIcon } alt="" />
         <p>Meals</p>
       </button>
       <button
@@ -29,7 +26,6 @@ function DoneRecipiesButton({
         data-testid="filter-by-drink-btn"
         onClick={ handleDrinkFilter }
       >
-        <img src={ drinkIcon } alt="" />
         <p>Drinks</p>
       </button>
     </div>
