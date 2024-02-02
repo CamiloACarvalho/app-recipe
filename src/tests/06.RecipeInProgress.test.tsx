@@ -123,6 +123,5 @@ describe('Teste para o componente Recipe In Progress', async () => {
 
     const btnOtherPage = await screen.findByTestId('filter-by-meal-btn');
     expect(btnOtherPage).toBeInTheDocument();
-    
   });
 });
