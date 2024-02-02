@@ -7,7 +7,10 @@ import emptyHeartIcon from '../images/whiteHeartIcon.svg';
 import finishIcon from '../images/icons8-done.svg';
 import shareRecipe from '../images/shareIcon.svg';
 import styles from './InProgressElements.module.css';
-import { DrinkType, MealType } from '../types/types';
+
+// senhor, socorro!
+
+// Obrigado Deus! #gratitude #Obrigado Lianny Jonathan do Pix Aleatório
 
 function RecipesInProgress() {
   const location = useLocation();
@@ -72,13 +75,13 @@ function RecipesInProgress() {
 
   const handleToggleFavorite = async () => {
     const addFavoriteRecipe = {
-      id: (recipes[0] as MealType).idMeal || (recipes[0] as DrinkType).idDrink,
-      type: (recipes[0] as MealType) ? 'meal' : 'drink',
-      nationality: (recipes[0] as MealType).strArea || '',
+      id: recipes[0].idMeal || recipes[0].idDrink,
+      type: recipes[0].idMeal ? 'meal' : 'drink',
+      nationality: recipes[0].strArea || '',
       category: recipes[0].strCategory || '',
-      alcoholicOrNot: (recipes[0] as DrinkType) || '',
-      name: (recipes[0] as MealType) || (recipes[0] as DrinkType),
-      image: (recipes[0] as MealType) || (recipes[0] as DrinkType),
+      alcoholicOrNot: recipes[0].strAlcoholic || '',
+      name: recipes[0].strMeal || recipes[0].strDrink,
+      image: recipes[0].strMealThumb || recipes[0].strDrinkThumb,
     };
 
     const favoriteRecipesSave = JSON
@@ -120,13 +123,13 @@ function RecipesInProgress() {
   const handleFineshedRecipe = () => {
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     const newDoneRecipe = {
-      id: (recipes[0] as MealType) || (recipes[0] as DrinkType),
-      type: (recipes[0] as MealType) ? 'meal' : 'drink',
-      nationality: (recipes[0] as MealType) || '',
+      id: recipes[0].idMeal || recipes[0].idDrink,
+      type: recipes[0].idMeal ? 'meal' : 'drink',
+      nationality: recipes[0].strArea || '',
       category: recipes[0].strCategory || '',
-      alcoholicOrNot: (recipes[0] as DrinkType) || '',
-      name: (recipes[0] as MealType) || (recipes[0] as DrinkType),
-      image: (recipes[0] as MealType) || (recipes[0] as DrinkType),
+      alcoholicOrNot: recipes[0].strAlcoholic || '',
+      name: recipes[0].strMeal || recipes[0].strDrink,
+      image: recipes[0].strMealThumb || recipes[0].strDrinkThumb,
       doneDate: new Date(),
       tags: recipes[0].strTags?.split(',') || [],
     };
@@ -136,8 +139,6 @@ function RecipesInProgress() {
 
     navigate('/done-recipes');
   };
-
-  console.log(concludedRecipe);
 
   return (
     <main>
@@ -156,7 +157,7 @@ function RecipesInProgress() {
           ))
         }
       </div>
-      { showCopiLink && <h2>Link copied!</h2>}
+      { showCopiLink && <h2 data-testid="mensage">Link copied!</h2>}
       <button
         type="button"
         className={ styles.Btn }

@@ -1,17 +1,21 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const useShared = (): any => {
   const [copyLink, setCopyLink] = useState<string>('');
 
+  const location = useLocation();
+
   const handleShared = async (id: number = 0, isDrink: boolean = false) => {
     let url;
-    url = window.location.href;
+
+    url = location.pathname;
     url = url.replace(/\/in-progres$/, '');
     if (id > 0) {
       if (isDrink) {
-        url = `${window.location.origin}/drinks/${id}`;
+        url = `${location.pathname}/drinks/${id}`;
       } else {
-        url = `${window.location.origin}/meals/${id}`;
+        url = `${location.pathname}/meals/${id}`;
       }
     }
     try {
