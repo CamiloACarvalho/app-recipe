@@ -1,4 +1,4 @@
-const mockDoneDrink = {
+const drinkMock = {
   id: '15997',
   type: 'drink',
   area: '',
@@ -10,7 +10,7 @@ const mockDoneDrink = {
   doneDate: '23/06/2021',
   tags: [],
 };
-const mockDoneMeal = {
+const mealsMock = {
   id: '52977',
   type: 'meal',
   area: 'Italian',
@@ -23,6 +23,6 @@ const mockDoneMeal = {
   tags: ['Pasta', 'Curry'],
 };
 export {
-  mockDoneDrink,
-  mockDoneMeal,
+  drinkMock,
+  mealsMock,
 };
