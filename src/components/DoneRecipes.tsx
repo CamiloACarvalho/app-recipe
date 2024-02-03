@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import { useShared } from '../hooks/useShared';
 import { useDoneRecipes } from '../hooks/useDoneRecipes';
 import shareIcon from '../images/shareIcon.svg';
-import DoneRecipesLink from '../helpers/DoneRecipesLink';
+import DoneRecipesLink from './DoneRecipesLink';
 import { DoneRecipe } from '../types/types';
-import DoneRecipiesButton from '../helpers/DoneRecipesButton';
+import DoneRecipiesButton from './DoneRecipesButton';
 
 function DoneRecipes() {
   const { handleShared, copyLink } = useShared();
@@ -22,7 +22,7 @@ function DoneRecipes() {
           handleDrinkFilter={ handleDrinkFilter }
         />
         {doneRecipes.map((recipe: DoneRecipe, index: any) => (
-          <div className="recipe-card" key={ recipe.id }>
+          <div key={ recipe.id }>
             <Link to={ `/${recipe.type}s/${recipe.id}` }>
               <img
                 data-testid={ `${index}-horizontal-image` }
@@ -46,7 +46,15 @@ function DoneRecipes() {
             </div>
             <button
               type="button"
-              onClick={ () => handleShared(recipe.id, recipe.type === 'drink') }
+              onClick={ () => {
+                handleShared(recipe.id, recipe.type === 'drink');
+                // Adicionando verificação para exibir a mensagem após a cópia
+                if (copyLink !== '') {
+                  navigator.clipboard.writeText(copyLink)
+                    .then(() => alert('Link copied!'))
+                    .catch((error) => console.error('Error copying link:', error));
+                }
+              } }
             >
               {copyLink !== '' ? (
                 <p>{copyLink}</p>

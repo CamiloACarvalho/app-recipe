@@ -17,7 +17,7 @@ function FavoritesCard({
   index,
   handleFavorite,
 }: Props) {
-  const { handleShareClick, copyStatus } = useShared();
+  const { handleShared, copyLink } = useShared();
   return (
     <div key={ recipe.id }>
       <Link to={ `/${recipe.type}s/${recipe.id}` }>
@@ -37,10 +37,18 @@ function FavoritesCard({
       </Link>
       <button
         type="button"
-        onClick={ () => handleShareClick(recipe.id, recipe.type === 'drink') }
+        onClick={ () => {
+          handleShared(recipe.id, recipe.type === 'drink');
+          // Adicionando verificação para exibir a mensagem após a cópia
+          if (copyLink !== '') {
+            navigator.clipboard.writeText(copyLink)
+              .then(() => alert('Link copied!'))
+              .catch((error) => console.error('Error copying link:', error));
+          }
+        } }
       >
-        {copyStatus !== '' ? (
-          <p>{copyStatus}</p>
+        {copyLink !== '' ? (
+          <p>{copyLink}</p>
         ) : (
           <img
             data-testid={ `${index}-horizontal-share-btn` }
