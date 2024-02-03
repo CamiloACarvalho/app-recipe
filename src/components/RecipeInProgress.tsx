@@ -48,7 +48,7 @@ function RecipesInProgress() {
   }, [setRecipes, location.pathname, id]);
 
   useEffect(() => {
-    const localStorageChecked = localStorage.getItem('inProgressRecipes-0');
+    const localStorageChecked = localStorage.getItem('checkedActive');
     const checkSave = localStorageChecked && JSON.parse(localStorageChecked);
     if (checkSave) {
       allChecked(checkSave);
