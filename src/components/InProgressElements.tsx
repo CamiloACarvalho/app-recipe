@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { DrinkType, MealType } from '../types/types';
 import styles from './InProgressElements.module.css';
 
@@ -15,7 +16,9 @@ function InProgressElements({
   onIngredientChecked,
   allChecked,
 }: InProgressProps) {
-  const localStorageKey = `inProgressRecipes-${index}`;
+  const location = useLocation();
+  const { id } = useParams<{ id: string }>();
+  const localStorageKey = 'checkedActive';
   const [ingredients, setIngredients] = useState<[string, string][]>([]);
   const [mensure, setMensure] = useState<[string, string][]>([]);
   const storedProgress = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
@@ -34,16 +37,59 @@ function InProgressElements({
     }
   };
 
-  const handleChecked = (ingredientIndex: number) => {
+  const saveIngredientsLocalStorage = (ingredient: string) => {
+    const recipeType = location.pathname.split('/')[1] === 'meals';
+    const ingredientStorage = JSON.parse(localStorage
+      .getItem('inProgressRecipes') || '{}');
+    if (recipeType && id) {
+      const meals = { ...ingredientStorage.meals, [id]: [ingredient] };
+      if (ingredientStorage.meals[id]) {
+        const mealsExist = ingredientStorage.meals[id];
+        if (mealsExist.includes(ingredient)) {
+          const newMeals = mealsExist.filter((meal: string) => meal !== ingredient);
+          localStorage.setItem('inProgressRecipes', JSON
+            .stringify({ ...ingredientStorage, meals: { [id]: newMeals } }));
+          return;
+        }
+        localStorage.setItem('inProgressRecipes', JSON
+          .stringify({ ...ingredientStorage,
+            meals: { [id]: [...ingredientStorage.meals[id], ingredient] },
+          }));
+        return;
+      }
+      localStorage.setItem('inProgressRecipes', JSON
+        .stringify({ ...ingredientStorage, meals }));
+      return;
+    }
+    if (!recipeType && id) {
+      const drinks = { ...ingredientStorage.drinks, [id]: [ingredient] };
+      if (ingredientStorage.drinks[id]) {
+        const drinksExist = ingredientStorage.drinks[id];
+        if (drinksExist.includes(ingredient)) {
+          const newDrinks = drinksExist.filter((drink: string) => drink !== ingredient);
+          localStorage.setItem('inProgressRecipes', JSON
+            .stringify({ ...ingredientStorage, drinks: { [id]: newDrinks } }));
+          return;
+        }
+        localStorage.setItem('inProgressRecipes', JSON
+          .stringify({ ...ingredientStorage,
+            drinks: { [id]: [...ingredientStorage.drinks[id], ingredient] },
+          }));
+        return;
+      }
+      localStorage.setItem('inProgressRecipes', JSON
+        .stringify({ ...ingredientStorage, drinks }));
+    }
+  };
+
+  const handleChecked = (ingredientIndex: number, ingredientName: string) => {
     setCheckedIngredients((prevCheckedIngredients) => {
       const newCheckedIngredients = { ...prevCheckedIngredients };
       newCheckedIngredients[ingredientIndex] = !newCheckedIngredients[ingredientIndex];
       localStorage.setItem(localStorageKey, JSON.stringify(newCheckedIngredients));
-
       onIngredientChecked(newCheckedIngredients[ingredientIndex]);
-
+      saveIngredientsLocalStorage(ingredientName);
       saveCheckedBox(newCheckedIngredients);
-
       return newCheckedIngredients;
     });
   };
@@ -67,15 +113,18 @@ function InProgressElements({
     const onlyMensureValid = mensureOfRecipe
       .filter((entry) => entry[1] !== null && entry[1] !== '');
 
+    const ingredientStorage = localStorage.getItem('inProgressRecipes');
+
+    if (!ingredientStorage) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify({
+        meals: {},
+        drinks: {},
+      }));
+    }
+
     setIngredients(onlyIngredientsValid);
     setMensure(onlyMensureValid);
   }, [recipe]);
-
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem(localStorageKey);
-    };
-  }, [localStorageKey]);
 
   return (
     <div
@@ -116,7 +165,7 @@ function InProgressElements({
                 className="checkbox"
                 type="checkbox"
                 checked={ checkedIngredients[i] || false }
-                onChange={ () => handleChecked(i) }
+                onChange={ () => handleChecked(i, ingredient[1]) }
               />
               { `${ingredient[1]}: ${mensure[i][1]}` }
             </label>

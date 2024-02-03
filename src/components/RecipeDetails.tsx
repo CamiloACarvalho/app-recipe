@@ -70,7 +70,7 @@ export default function RecipeDetails() {
   };
 
   const handleShare = async () => {
-    const pathLocation = window.location.href;
+    const pathLocation = location.pathname;
     await navigator.clipboard.writeText(pathLocation);
     setCopiedPath(true);
   };
