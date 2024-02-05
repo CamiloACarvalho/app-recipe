@@ -185,3 +185,29 @@ describe('Teste para o componente Recipe In Progress', async () => {
 //     expect(localStorage.getItem('inProgressRecipes-0')).toBe(localStorageMock);
 //   });
 // });
+
+// test('02 - Verificando as funcionalidades da tela "Recipes in Progress"', async () => {
+//   renderWithRouter(
+//     <SearchProvider>
+//       <App />
+//     </SearchProvider>,
+//     { route: routeTest },
+//   );
+
+//   const inputCheck1 = await screen.findByTestId(checkbox1);
+//   const inputCheck2 = await screen.findByTestId(checkbox2);
+//   const inputCheck3 = await screen.findByTestId(checkbox3);
+
+//   await userEvent.click(inputCheck1);
+//   await userEvent.click(inputCheck2);
+//   await userEvent.click(inputCheck3);
+
+//   const finish = await screen.findByTestId('finish-recipe-btn');
+//   expect(finish).toBeEnabled();
+
+//   await userEvent.click(finish);
+
+//   const btnOtherPage = await screen.findByTestId('filter-by-meal-btn');
+//   expect(btnOtherPage).toBeInTheDocument();
+// });
+
