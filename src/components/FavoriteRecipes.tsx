@@ -19,26 +19,15 @@ function FavoriteRecipes() {
           handleFilterDrink={ handleFilterDrink }
           handleFilterAll={ handleFilterAll }
         />
-        {favoriteSort.length > 0
-          && favoriteRecipes.map((recipe: any, index: any) => (
-            <FavoritesCard
-              favoriteRecipes={ favoriteSort }
-              key={ recipe.id }
-              recipe={ recipe }
-              index={ index }
-              handleFavorite={ handleFavorite }
-            />
-          ))}
-        {favoriteSort.length === 0
-          && favoriteRecipes.map((recipe: any, index: any) => (
-            <FavoritesCard
-              favoriteRecipes={ favoriteRecipes }
-              key={ recipe.id }
-              recipe={ recipe }
-              index={ index }
-              handleFavorite={ handleFavorite }
-            />
-          ))}
+        {favoriteRecipes.map((recipe: any, index: any) => (
+          <FavoritesCard
+            favoriteRecipes={ favoriteSort.length > 0 ? favoriteSort : favoriteRecipes }
+            key={ recipe.id }
+            recipe={ recipe }
+            index={ index }
+            handleFavorite={ handleFavorite }
+          />
+        ))}
       </div>
     </div>
   );
