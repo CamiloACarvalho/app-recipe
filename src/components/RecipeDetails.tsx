@@ -18,6 +18,7 @@ export default function RecipeDetails() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [copiedPath, setCopiedPath] = useState(false);
   const [favorite, setFavorite] = useState(false);
+  const [showCopyLink, setShowCopyLink] = useState(false);
 
   useEffect(() => {
     const mealEndpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${params.id}`;
@@ -69,10 +70,28 @@ export default function RecipeDetails() {
     }
   };
 
-  const handleShare = async () => {
-    const pathLocation = location.pathname;
-    await navigator.clipboard.writeText(pathLocation);
-    setCopiedPath(true);
+  // const handleShare = async () => {
+  //   const pathLocation = location.pathname;
+  //   await navigator.clipboard.writeText(pathLocation);
+  //   setCopiedPath(true);
+  // };
+
+  const handleShareLinkRecipeInProgress = () => {
+    const mealPage = location.pathname.split('/')[1] === 'meals';
+    const recipeType = mealPage ? 'meals' : 'drinks';
+    const recipeId = location.pathname.split('/')[2];
+    const link = `http://localhost:3000/${recipeType}/${recipeId}`;
+
+    navigator.clipboard.writeText(link)
+      .then(() => {
+        setShowCopyLink(true);
+        setTimeout(() => {
+          setShowCopyLink(false);
+        }, 3000);
+      })
+      .catch(() => {
+        alert('Erro ao copiar o link:');
+      });
   };
 
   const handleFavorite = () => {
@@ -87,7 +106,7 @@ export default function RecipeDetails() {
       />
       <button
         data-testid="share-btn"
-        onClick={ handleShare }
+        onClick={ handleShareLinkRecipeInProgress }
       >
         <img
           src={ shareIcon }
@@ -96,7 +115,7 @@ export default function RecipeDetails() {
       </button>
       {' '}
       {
-        copiedPath && <span>Link copied!</span>
+        showCopyLink && <span>Link copied!</span>
       }
       {' '}
       <button
