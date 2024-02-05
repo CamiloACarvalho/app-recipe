@@ -16,9 +16,9 @@ export default function RecipeDetails() {
   const [recipes, setRecipes] = useState([]);
   const [recomendation, setRecomendation] = useState([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const [copiedPath, setCopiedPath] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [showCopyLink, setShowCopyLink] = useState(false);
+  const [inProgress, setInProgress] = useState('Start Recipe');
 
   useEffect(() => {
     const mealEndpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${params.id}`;
@@ -52,6 +52,18 @@ export default function RecipeDetails() {
         .some((favoriteItem: FavoriteKey) => favoriteItem.id === params.id);
       setFavorite(checkFavorite);
     }
+    const getProgress = JSON.parse(
+      localStorage.getItem('inProgressRecipes') as string);
+    if (getProgress) {
+      if (mealPage) {
+        const getMealsKey = Object.keys(getProgress.meals)
+        const checkProgress = getMealsKey[0] === params.id;
+        if (checkProgress) setInProgress('Continue Recipe')
+      } else {
+        const getDrinksKey = Object.keys(getProgress.drinks);
+        const checkProgress = getDrinksKey[0] === params.id;
+        if (checkProgress) setInProgress('Continue Recipe')
+    }}
   }, [params.id, location.pathname, setFavorite]);
 
   const recipeData = location.pathname.includes('/meals/')
@@ -69,12 +81,6 @@ export default function RecipeDetails() {
       navigate(`/drinks/${params.id}/in-progress`);
     }
   };
-
-  // const handleShare = async () => {
-  //   const pathLocation = location.pathname;
-  //   await navigator.clipboard.writeText(pathLocation);
-  //   setCopiedPath(true);
-  // };
 
   const handleShareLinkRecipeInProgress = () => {
     const mealPage = location.pathname.split('/')[1] === 'meals';
@@ -137,7 +143,7 @@ export default function RecipeDetails() {
         className="start-recipe"
         onClick={ handleStart }
       >
-        Start Recipe
+        { inProgress }
       </button>
     </>
   );
