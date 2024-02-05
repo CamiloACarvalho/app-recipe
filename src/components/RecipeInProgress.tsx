@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchContext from '../context/SearchContext/SearchContext';
-import InProgressElements from './InProgressElements';
 import fullHeartIcon from '../images/blackHeartIcon.svg';
-import emptyHeartIcon from '../images/whiteHeartIcon.svg';
 import finishIcon from '../images/icons8-done.svg';
 import shareRecipe from '../images/shareIcon.svg';
+import emptyHeartIcon from '../images/whiteHeartIcon.svg';
+import { DrinkType, MealType } from '../types/types';
+import InProgressElements from './InProgressElements';
 import styles from './InProgressElements.module.css';
 
 // senhor, socorro!
@@ -75,13 +76,14 @@ function RecipesInProgress() {
 
   const handleToggleFavorite = async () => {
     const addFavoriteRecipe = {
-      id: recipes[0].idMeal || recipes[0].idDrink,
-      type: recipes[0].idMeal ? 'meal' : 'drink',
-      nationality: recipes[0].strArea || '',
-      category: recipes[0].strCategory || '',
-      alcoholicOrNot: recipes[0].strAlcoholic || '',
-      name: recipes[0].strMeal || recipes[0].strDrink,
-      image: recipes[0].strMealThumb || recipes[0].strDrinkThumb,
+      id: (recipes[0] as MealType).idMeal || (recipes[0] as DrinkType).idDrink,
+      type: (recipes[0] as MealType).idMeal ? 'meal' : 'drink',
+      nationality: (recipes[0] as MealType).strArea || '',
+      category: (recipes[0]).strCategory || '',
+      alcoholicOrNot: (recipes[0] as DrinkType).strAlcoholic || '',
+      name: (recipes[0] as MealType).strMeal || (recipes[0] as DrinkType).strDrink,
+      image: (recipes[0] as MealType).strMealThumb
+      || (recipes[0] as DrinkType).strDrinkThumb,
     };
 
     const favoriteRecipesSave = JSON
@@ -123,15 +125,16 @@ function RecipesInProgress() {
   const handleFineshedRecipe = () => {
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
     const newDoneRecipe = {
-      id: recipes[0].idMeal || recipes[0].idDrink,
-      type: recipes[0].idMeal ? 'meal' : 'drink',
-      nationality: recipes[0].strArea || '',
-      category: recipes[0].strCategory || '',
-      alcoholicOrNot: recipes[0].strAlcoholic || '',
-      name: recipes[0].strMeal || recipes[0].strDrink,
-      image: recipes[0].strMealThumb || recipes[0].strDrinkThumb,
+      id: (recipes[0] as MealType).idMeal || (recipes[0] as DrinkType).idDrink,
+      type: (recipes[0] as MealType).idMeal ? 'meal' : 'drink',
+      nationality: (recipes[0] as MealType).strArea || '',
+      category: (recipes[0]).strCategory || '',
+      alcoholicOrNot: (recipes[0] as DrinkType).strAlcoholic || '',
+      name: (recipes[0] as MealType).strMeal || (recipes[0] as DrinkType).strDrink,
+      image: (recipes[0] as MealType).strMealThumb
+      || (recipes[0] as DrinkType).strDrinkThumb,
       doneDate: new Date(),
-      tags: recipes[0].strTags?.split(',') || [],
+      tags: (recipes[0]).strTags?.split(',') || [],
     };
 
     doneRecipes.push(newDoneRecipe);
@@ -139,6 +142,8 @@ function RecipesInProgress() {
 
     navigate('/done-recipes');
   };
+
+  console.log(concludedRecipe);
 
   return (
     <main>
