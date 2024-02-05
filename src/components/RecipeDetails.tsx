@@ -21,29 +21,6 @@ export default function RecipeDetails() {
   const [inProgress, setInProgress] = useState('Start Recipe');
 
   useEffect(() => {
-    const mealEndpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${params.id}`;
-    const drinkEndpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${params.id}`;
-    const mealPage = location.pathname.includes('/meals/');
-    const endpoint = mealPage
-      ? mealEndpoint
-      : drinkEndpoint;
-    const recomendationEndpoint = mealPage
-      ? 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s='
-      : 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-    fetch(endpoint)
-      .then((response) => response.json())
-      .then((data) => {
-        const recipeType = mealPage ? 'meals' : 'drinks';
-        const fetchedRecipes = data[recipeType];
-        setRecipes(fetchedRecipes);
-      });
-    fetch(recomendationEndpoint)
-      .then((response) => response.json())
-      .then((data) => {
-        const recipeType = mealPage ? 'drinks' : 'meals';
-        const fetchedRecipes = data[recipeType];
-        setRecomendation(fetchedRecipes.slice(0, 6));
-      });
     const getFavorite = JSON.parse(
       localStorage.getItem('favoriteRecipes') as string,
     ) || [];
@@ -52,19 +29,48 @@ export default function RecipeDetails() {
         .some((favoriteItem: FavoriteKey) => favoriteItem.id === params.id);
       setFavorite(checkFavorite);
     }
+    const mealPage = location.pathname.includes('/meals/');
     const getProgress = JSON.parse(
-      localStorage.getItem('inProgressRecipes') as string);
+      localStorage.getItem('inProgressRecipes') as string,
+    );
     if (getProgress) {
       if (mealPage) {
-        const getMealsKey = Object.keys(getProgress.meals)
+        const getMealsKey = Object.keys(getProgress.meals);
         const checkProgress = getMealsKey[0] === params.id;
-        if (checkProgress) setInProgress('Continue Recipe')
+        if (checkProgress) setInProgress('Continue Recipe');
       } else {
         const getDrinksKey = Object.keys(getProgress.drinks);
         const checkProgress = getDrinksKey[0] === params.id;
-        if (checkProgress) setInProgress('Continue Recipe')
-    }}
-  }, [params.id, location.pathname, setFavorite]);
+        if (checkProgress) setInProgress('Continue Recipe');
+      }
+    }
+  }, [location.pathname, params.id]);
+
+  useEffect(() => {
+    const mealEndpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${params.id}`;
+    const drinkEndpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${params.id}`;
+    const mealPage = location.pathname.includes('/meals/');
+    const endpoint = mealPage
+      ? mealEndpoint
+      : drinkEndpoint;
+    fetch(endpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        const recipeType = mealPage ? 'meals' : 'drinks';
+        const fetchedRecipes = data[recipeType];
+        setRecipes(fetchedRecipes);
+      });
+    const recomendationEndpoint = mealPage
+      ? 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s='
+      : 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+    fetch(recomendationEndpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        const recipeType = mealPage ? 'drinks' : 'meals';
+        const fetchedRecipes = data[recipeType];
+        setRecomendation(fetchedRecipes.slice(0, 6));
+      });
+  }, [location.pathname, params.id]);
 
   const recipeData = location.pathname.includes('/meals/')
     ? recipes?.map((recipe) => mapData(recipe, 'Meal'))
@@ -83,8 +89,8 @@ export default function RecipeDetails() {
   };
 
   const handleShareLinkRecipeInProgress = () => {
-    const mealPage = location.pathname.split('/')[1] === 'meals';
-    const recipeType = mealPage ? 'meals' : 'drinks';
+    const mealPageLocation = location.pathname.split('/')[1] === 'meals';
+    const recipeType = mealPageLocation ? 'meals' : 'drinks';
     const recipeId = location.pathname.split('/')[2];
     const link = `http://localhost:3000/${recipeType}/${recipeId}`;
 
