@@ -4,7 +4,11 @@ import { CarouselCardProps, DrinkType, MealType } from '../types/types';
 export default function CarouselCard({ recomendation,
   handleSelect, carouselIndex }: CarouselCardProps) {
   return (
-    <Carousel activeIndex={ carouselIndex } onSelect={ handleSelect }>
+    <Carousel
+      data-testid="carousel"
+      activeIndex={ carouselIndex }
+      onSelect={ handleSelect }
+    >
       {recomendation.map((item, index) => (
         index % 2 === 0 && (
           <Carousel.Item key={ index }>

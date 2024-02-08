@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FavoritesLink from './FavoritesLink';
 import shareIcon from '../images/shareIcon.svg';
 import { useShared } from '../hooks/useShared';
@@ -20,8 +20,9 @@ function FavoritesCard({
   const { handleShared, copyLink } = useShared();
   return (
     <div key={ recipe.id }>
-      <Link to={ `/${recipe.type}s/${recipe.id}` }>
+      <Link to={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }>
         <img
+          style={ { width: '100px' } }
           data-testid={ `${index}-horizontal-image` }
           src={ recipe.image }
           alt={ recipe.name }
@@ -32,7 +33,7 @@ function FavoritesCard({
           ? `${recipe.nationality} - ${recipe.category}`
           : recipe.alcoholicOrNot}
       </p>
-      <Link to={ `/${recipe.type}s/${recipe.id}` }>
+      <Link to={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }>
         <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
       </Link>
       <button
