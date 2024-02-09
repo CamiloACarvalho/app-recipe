@@ -25,7 +25,7 @@ function App() {
         }
       />
       <Route
-        path="favorite-recipes"
+        path="/favorite-recipes"
         element={
           <>
             <Header />
@@ -83,8 +83,8 @@ function App() {
           </>
         }
       />
-      <Route path="/done-recipes" element={ <Header /> } />
-      <Route path="/favorite-recipes" element={ <Header /> } />
+      {/* <Route path="/done-recipes" element={ <Header /> } /> */}
+      {/* <Route path="/favorite-recipes" element={ <Header /> } /> */}
     </Routes>
   );
 }

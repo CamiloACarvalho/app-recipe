@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import SearchContext from '../context/SearchContext/SearchContext';
+import profile from '../images/profileIcon.svg';
+import search from '../images/searchIcon.svg';
 
 function Header() {
   const [pageTitle, setPageTitle] = useState('');
@@ -51,7 +53,7 @@ function Header() {
         >
           <img
             data-testid="profile-top-btn"
-            src="src/images/profileIcon.svg"
+            src={ profile }
             alt="profile icon"
             className="profile-icon"
           />
@@ -80,7 +82,7 @@ function Header() {
           >
             <img
               data-testid="search-top-btn"
-              src="src/images/searchIcon.svg"
+              src={ search }
               alt="search icon"
             />
           </button>

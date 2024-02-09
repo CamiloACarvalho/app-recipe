@@ -8,6 +8,7 @@ type RecipeCardProps = {
 
 function RecipeCard({ recipe, index }: RecipeCardProps) {
   const location = useLocation();
+  console.log(recipe);
   return (
     <div
       key={ index }
